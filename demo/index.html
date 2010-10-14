@@ -7,19 +7,16 @@
 
 	<title>scrollbar_plugin</title>
 	
-	<link rel="stylesheet" href="../styles/reset.css" type="text/css" media="screen" title="no title" charset="utf-8">
-	<link rel="stylesheet" href="../styles/base.css" type="text/css" media="screen" title="no title" charset="utf-8">
-	
 	<style type="text/css" media="screen">
 		html, body{min-height:0; background:#fff;}
 	</style>
 	
 	<style type="text/css" media="screen">
-/*    body{
-      background:black;
-      color:white;
-    }*/
-	  
+/*		body{
+			background:black;
+			color:white;
+		}*/
+		
 		.scrollable{
 			height:200px;
 			width:200px;
@@ -27,6 +24,7 @@
 			position:absolute;
 			top:30px;
 			left:20px;
+			border:1px solid green;
 		}
 
 		.scrollContent{
@@ -42,7 +40,7 @@
 			border:2px solid transparent;
 			-webkit-border-radius: 3px;
 			-moz-border-radius: 3px;
-			border-radius: 3px;    
+			border-radius: 3px;		 
 			
 			height:6px;
 			width:6px;
@@ -78,15 +76,23 @@
 		
 	</style>
 	
+		
+	<script src="scripts/jquery-1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="scripts/scroll-startstop.events.jquery.js" type="text/javascript" charset="utf-8"></script>
+	<script src="scripts/jquery.trace.js" type="text/javascript" charset="utf-8"></script>
+	<script src="scripts/jquery.ui.widget.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../source/jquery.scrollbars.js" type="text/javascript" charset="utf-8"></script>
+	
 	<script type="text/javascript" charset="utf-8">
 		debugging=true;
 	</script>
 	
-	<script src="../scripts/jquery-1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="../scripts/scroll-startstop.events.jquery.js" type="text/javascript" charset="utf-8"></script>
-	<script src="../scripts/jquery.trace.js" type="text/javascript" charset="utf-8"></script>
 	
-	
+	<script type="text/javascript" charset="utf-8">
+	 $(function(){
+		 $('.scrollable').scrollbars();
+	 });
+	</script>
 	
 </head>
 
@@ -94,14 +100,14 @@
 	<div class="scrollable">
 			<p>A Tale of Two Cities (1859) is a novel by Charles Dickens, set in London and Paris before and during the French Revolution. With well over 200 million copies sold, it is among the most famous works of fiction.[2]</p>
 
-      <p>The novel depicts the plight of the French peasantry demoralized by the French aristocracy in the years leading up to the revolution, the corresponding brutality demonstrated by the revolutionaries toward the former aristocrats in the early years of the revolution, and many unflattering social parallels with life in London during the same time period. It follows the lives of several protagonists through these events. The most notable are Charles Darnay and Sydney Carton. Darnay is a French once-aristocrat who falls victim to the indiscriminate wrath of the revolution despite his virtuous nature, and Carton is a dissipated British barrister who endeavours to redeem his ill-spent life out of his unrequited love for Darnay's wife, Lucie Manette.</p>
+			<p>The novel depicts the plight of the French peasantry demoralized by the French aristocracy in the years leading up to the revolution, the corresponding brutality demonstrated by the revolutionaries toward the former aristocrats in the early years of the revolution, and many unflattering social parallels with life in London during the same time period. It follows the lives of several protagonists through these events. The most notable are Charles Darnay and Sydney Carton. Darnay is a French once-aristocrat who falls victim to the indiscriminate wrath of the revolution despite his virtuous nature, and Carton is a dissipated British barrister who endeavours to redeem his ill-spent life out of his unrequited love for Darnay's wife, Lucie Manette.</p>
 
-      <p>The novel was published in weekly installments instead of monthly, as with most of his other novels. The first ran in the first issue of Dickens' literary periodical All the Year Round on 30 April 1859. The last ran thirty-one weeks later, on 25 November.[1]</p>
+			<p>The novel was published in weekly installments instead of monthly, as with most of his other novels. The first ran in the first issue of Dickens' literary periodical All the Year Round on 30 April 1859. The last ran thirty-one weeks later, on 25 November.[1]</p>
 			<p>The first book of the novel takes place in 1775. Jarvis Lorry, an employee of Tellson's Bank, is travelling from England to France to bring Dr. Alexandre Manette to London on his return trip. Before crossing into France, he meets 17-year-old Lucie Manette at Dover, and reveals to her that her father, Dr. Manette, is not dead, as she had been told; instead, he was a prisoner in the Bastille for eighteen years.</p>
 
-      <p>Lorry and Lucie travel to Saint Antoine, a suburb of Paris and meet Monsieur Ernest and Madame Therese Defarge. The Defarges operate a wine shop they use to lead a clandestine band of revolutionaries; they refer to each other by the codename "Jacques", which Dickens drew from the Jacobins, an actual French revolutionary group.</p>
+			<p>Lorry and Lucie travel to Saint Antoine, a suburb of Paris and meet Monsieur Ernest and Madame Therese Defarge. The Defarges operate a wine shop they use to lead a clandestine band of revolutionaries; they refer to each other by the codename "Jacques", which Dickens drew from the Jacobins, an actual French revolutionary group.</p>
 
-      <p>Monsieur Defarge was Dr. Manette's servant before Manette's imprisonment and now has care of him, and he takes them to see the doctor. Because of his long imprisonment, Dr. Manette entered a form of psychosis and has become obsessed with making shoes, a trade he had learned whilst imprisoned. At first, he does not recognize his daughter; but he eventually compares her long golden hair with her mother's, which he found on his sleeve when he was imprisoned and kept, and notices their identical blue eye color. Lorry and Lucie then take him back to England.</p>
+			<p>Monsieur Defarge was Dr. Manette's servant before Manette's imprisonment and now has care of him, and he takes them to see the doctor. Because of his long imprisonment, Dr. Manette entered a form of psychosis and has become obsessed with making shoes, a trade he had learned whilst imprisoned. At first, he does not recognize his daughter; but he eventually compares her long golden hair with her mother's, which he found on his sleeve when he was imprisoned and kept, and notices their identical blue eye color. Lorry and Lucie then take him back to England.</p>
 			<p>The End.</p>
 	</div>
 </body>
