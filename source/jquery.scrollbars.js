@@ -82,13 +82,10 @@ $.widget("modkit.scrollbars", {
 	_getScrollbarWidth: function(){
 		var div = $('<div style="width:50px;height:50px;overflow:hidden;position:absolute;top:-200px;left:-200px;"><div id="scrollbarWidthTester" style="height:100px;float:none;display:block;"></div>'); 
 		$('body').append(div); 
-		
 		var f = $('#scrollbarWidthTester').width();
 		div.css('overflow', 'auto');
-		
 		var s = $('#scrollbarWidthTester').width();
 		div.remove();
-		
 		return f-s;
 	},
 /*------------------- Event Handlers ----------------------*/
