@@ -1,0 +1,10 @@
+This plugin is for all the developers that "really" would rather not subject users to different scrollbars than they are used to, but have designers who are "in charge." The goals of the plugin are to use the system scrollbars as they are, but simply hide them from the user through the magic of overflow:hidden.
+
+By default this plugin will work the same way that the iPhone scrollbars work, they appear while scrolling and then disappear, or fade back to whatever opacity you want. Since the user has a mouse and not a touch screen, I've also added the ability to show scroll handles at all times, or even when the mouse rolls over the scrollbar area. And of course, clicking and dragging the handle will work the same way as a normal scrollbar, as will clicking on the "bar" area of the scrollbar (invisible by default but fully styleable with CSS). Since it uses standard CSS overflow, it is also fully iPad/Phone/Pod touch compatible (you have to use 2 finger scrolling though, which I learned while making this plugin (after almost a year of iPhone ownership)).
+
+Arrows aren't supported, but that's something no designer has ever asked me for in a custom scrollbar.
+
+Use this how you see fit, but sparingly, and please if possible don't use it, systemwide scrollbars are systemwide for a reason ;P
+
+Thanks,
+Collin
