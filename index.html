@@ -60,24 +60,24 @@
     
     <h2>Example</h2>
     <p>HTML</p>
-    <code>
-      <div class="scrollable">
-        <p>A bunch of content that will force the containing div to scroll (if it's overflow was set to "auto", (or "scroll")).</p>
-        <p>Can be any combination of elements, or I think even raw text, though I haven't tested that yet.</p>
-        <p>And if your content doesn't need to scroll not harm, you just won't see anything change (also the scrollbars won't be displayed, (event if you set the scrollable's overflow to "scroll"))</p>
-      </div>
-    </code>
+    <pre>
+      &lt;div class=&quot;scrollable&quot;&gt;
+        &lt;p&gt;A bunch of content that will force the containing div to scroll (if it&#x27;s overflow was set to &quot;auto&quot;, (or &quot;scroll&quot;)).&lt;/p&gt;
+        &lt;p&gt;Can be any combination of elements, or I think even raw text, though I haven&#x27;t tested that yet.&lt;/p&gt;
+        &lt;p&gt;And if your content doesn&#x27;t need to scroll not harm, you just won&#x27;t see anything change (also the scrollbars won&#x27;t be displayed, (event if you set the scrollable&#x27;s overflow to &quot;scroll&quot;))&lt;/p&gt;
+      &lt;/div&gt;
+    </pre>
     <p>CSS</p>
-    <code>
+    <pre>
       Still working on cleaning that up...
       For now just look at the included css file ;)
-    </code
+    </pre>
     <p>Javascript</p>
-    <code>
+    <pre>
       $(document).ready(function(){
-        $('.scrollable').scrollbars();
+        $(&#x27;.scrollable&#x27;).scrollbars();
       });
-    </code>
+    </pre>
     
     <h2>License</h2>
     <p>The MIT License
