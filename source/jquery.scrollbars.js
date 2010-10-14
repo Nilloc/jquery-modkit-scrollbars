@@ -38,7 +38,9 @@ $.widget("modkit.scrollbars", {
 		// creation code for mywidget
 		this.scrollbarWidth = this._getScrollbarWidth();
 		
-		this.element.css({overflow:'hidden', position:'relative'}); // this should not overwrite the existing, if it is fixed or absolute...
+		this.element.css({overflow:'hidden'}); // this should not overwrite the existing, if it is fixed or absolute...
+		if(this.element.css("position") != "absolute" && this.element.css("position") != "fixed ")
+			this.element.css({position:"relative"});
 		
 		// more globally, we'll have to pass the css from the scrollable to the scrollContent at some point. or else not reparent.
 		this.element.children().wrapAll('<div class="scrollContent"/>');
@@ -46,7 +48,7 @@ $.widget("modkit.scrollbars", {
 		this.element.children().wrapAll('<div class="scrollRect" style="overflow:scroll;"/>');
 		this.scrollRect = this.element.children(); // should probably be smarter
 		
-		this.scrollRect.width(this.element.width()+this.scrollbarWidth).height(this.element.width()+this.scrollbarWidth);
+		this.scrollRect.width(this.element.innerWidth()+this.scrollbarWidth).height(this.element.innerHeight()+this.scrollbarWidth);
 		
 		// this.scrollbar = {vertical:null, horizontal:null};
 		// this.scrollHandle = {vertical:null, horizontal:null};
@@ -188,11 +190,11 @@ $.widget("modkit.scrollbars", {
 		this.scrollHandleVertical.height((this.element.width()*this.scrollRatio.top) - scrollPadding.top);
 		this.scrollHandleHorizontal.width((this.element.width()*this.scrollRatio.left) - scrollPadding.left);
 		
-		if(this.scrollRatio.top == 1)
+		if(this.scrollRatio.top >= 1)
 			this.scrollHandleVertical.css({display:"none"});
 		else
 			this.scrollHandleVertical.css({display:"block"});
-		if(this.scrollRatio.left == 1)
+		if(this.scrollRatio.left >= 1)
 			this.scrollHandleHorizontal.css({display:"none"});
 		else
 			this.scrollHandleHorizontal.css({display:"block"});
