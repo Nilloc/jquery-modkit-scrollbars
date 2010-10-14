@@ -52,7 +52,7 @@ $.widget("modkit.scrollbars", {
 		// this.scrollHandle = {vertical:null, horizontal:null};
 		this.vector={x:0,y:0};
 		
-		this.scrollbarVertical = $('<div class="scrollbar bar vertical"></div>');
+		this.scrollbarVertical = $('<div class="scrollbar bar vertical"></div>'); // this could be shorter if i reverse the order and return the $(new html).append...
 		this.scrollbarHorizontal = $('<div class="scrollbar bar horizontal"></div>');
 		
 		this.scrollHandleVertical = $('<div class="scrollbar handle vertical"></div>');
@@ -63,23 +63,15 @@ $.widget("modkit.scrollbars", {
 		
 		this.element.append(this.scrollbarVertical).append(this.scrollbarHorizontal);
 		
-		this.scrollRect.scroll(this._moveScrollbar);
+		this.scrollRect.data("scrollbars", this).scroll(this._moveScrollbar).bind('scrollStart', this._showScrollbars).bind('scrollStop', this._hideScrollbars);
 		
+		this.scrollbarVertical.data("scrollbars", this).mouseover(this._handleMouseOver).mouseout(this._handleMouseOut).mousedown(this._handleScrollbarMouseDownVertical);
+		this.scrollbarHorizontal.data("scrollbars", this).mouseover(this._handleMouseOver).mouseout(this._handleMouseOut).mousedown(this._handleScrollbarMouseDownHorizontal);
+		this.scrollHandleVertical.data("scrollbars", this).mouseover(this._handleMouseOver).mouseout(this._handleMouseOut).mousedown(this._handleScrollHandleMouseDownVertical);
+		this.scrollHandleHorizontal.data("scrollbars", this).mouseover(this._handleMouseOver).mouseout(this._handleMouseOut).mousedown(this._handleScrollHandleMouseDownHorizontal);
 		
-		trace(this.scrollbarVertical, this.scrollHandleVertical)
-
-		this.scrollRect.bind('scrollStart', this._showScrollbars);
-		this.scrollRect.bind('scrollStop', this._hideScrollbars);
-
-		this.scrollbarVertical.mouseover(this._handleMouseOver).mouseout(this._handleMouseOut);
-		this.scrollbarHorizontal.mouseover(this._handleMouseOver).mouseout(this._handleMouseOut);
-		this.scrollHandleVertical.mouseover(this._handleMouseOver).mouseout(this._handleMouseOut);
-		this.scrollHandleHorizontal.mouseover(this._handleMouseOver).mouseout(this._handleMouseOut);
-
-		this.scrollHandleVertical.mousedown(this._handleScrollHandleMouseDownVertical);
-		this.scrollHandleHorizontal.mousedown(this._handleScrollHandleMouseDownVertical);
-		this.scrollbarVertical.mousedown(this._handleScrollbarMouseDownVertical);
-		this.scrollbarHorizontal.mousedown(this._handleScrollbarMouseDownHorizontal);
+		// jQuery.data(this.element, this); // don't think this can help...
+		
 		
 		$(window).mouseup(function(){ // ends the mouse drag, works everywhere.
 			$(this).unbind('mousemove');
@@ -99,57 +91,64 @@ $.widget("modkit.scrollbars", {
 		
 		return f-s;
 	},
-	_showScrollbars: function(){
-		this.scrollbarVertical.stop().animate({opacity: settings.maxOpacity}, 50);
-		this.scrollbarHorizontal.stop().animate({opacity: settings.maxOpacity}, 50);
+/*------------------- Event Handlers ----------------------*/
+	_showScrollbars: function(evt)
+	{
+		var $this = $(evt.target).data("scrollbars");
+		$this.scrollbarVertical.stop().animate({opacity: $this.options.maxOpacity}, 50);
+		$this.scrollbarHorizontal.stop().animate({opacity: $this.options.maxOpacity}, 50);
 	},
 	_hideScrollbars: function(evt)
 	{
 		// fixme: still a small edgecase where the handle will not trigger (drag the handle and move the moues off the scrollbar...)
-		if(!this.scrollbarVertical.hasClass("mouseOn") && !this.scrollHandleVertical.hasClass("mouseOn"))
-		  this.scrollbarVertical.stop().animate({opacity: settings.minOpacity}, 500);
+		
+		var $this = $(evt.target).data("scrollbars");
+		if(!$this.scrollbarVertical.hasClass("mouseOn") && !$this.scrollHandleVertical.hasClass("mouseOn"))
+		  $this.scrollbarVertical.stop().animate({opacity: $this.options.minOpacity}, 500);
 		  
-		if(!this.scrollbarHorizontal.hasClass("mouseOn") && !this.scrollHandleHorizontal.hasClass("mouseOn"))
-		  this.scrollbarHorizontal.stop().animate({opacity: settings.minOpacity}, 500);
+		if(!$this.scrollbarHorizontal.hasClass("mouseOn") && !$this.scrollHandleHorizontal.hasClass("mouseOn"))
+		  $this.scrollbarHorizontal.stop().animate({opacity: $this.options.minOpacity}, 500);
 	},
-/*------------------- Event Handlers ----------------------*/
-	_moveScrollbar: function(evt) {
+	_moveScrollbar: function(evt)
+	{
+		var $this = $(evt.target).data("scrollbars");
 		// console.log(evt) evt.originalEvent.scrollHeight is cool...
-		if(!!this.scrollRatio){
-			this.scrollHandleVertical.css({top:(this.scrollRect.scrollTop()*this.scrollRatio.top)+"px"});
-			this.scrollHandleHorizontal.css({left:(this.scrollRect.scrollLeft()*this.scrollRatio.left)+"px"});
+		if(!!$this.scrollRatio){
+			$this.scrollHandleVertical.css({top:($this.scrollRect.scrollTop()*$this.scrollRatio.top)+"px"});
+			$this.scrollHandleHorizontal.css({left:($this.scrollRect.scrollLeft()*$this.scrollRatio.left)+"px"});
 		}
 	},
 	_handleMouseOver: function(evt)
 	{
-	  $(evt.target).addClass("mouseOn");
-	  this._showScrollbars(evt);
+		var $this = $(evt.target).addClass("mouseOn").data("scrollbars");
+	  $this._showScrollbars(evt);
 	},
 	_handleMouseOut: function(evt)
 	{
-	  trace("moused out!!!!")
-	  $(evt.target).removeClass("mouseOn");
-	  this._hideScrollbars(evt);
+		var $this = $(evt.target).removeClass("mouseOn").data("scrollbars");
+	  $this._hideScrollbars(evt);
 	},
 	_handleScrollHandleMouseDownVertical: function(evt)
 	{
-		this.vector.y = evt.pageY;
+		var $this = $(evt.target).data("scrollbars");
+		$this.vector.y = evt.pageY;
 
 		$(window).mousemove(function(evt){
-			this.scrollRect.scrollTop(this.scrollRect.scrollTop()-((this.vector.y-evt.pageY)/this.scrollRatio.top));
-			this.vector.y = evt.pageY;
+			$this.scrollRect.scrollTop($this.scrollRect.scrollTop()-(($this.vector.y-evt.pageY)/$this.scrollRatio.top));
+			$this.vector.y = evt.pageY;
 		});
 
 		return false;
 	},
 	
-	_handleScrollHandleMouseDownVertical: function(evt)
+	_handleScrollHandleMouseDownHorizontal: function(evt)
 	{
-		this.vector.x = evt.pageX;
+		var $this = $(evt.target).data("scrollbars");
+		$this.vector.x = evt.pageX;
 
 		$(window).mousemove(function(evt){
-			this.scrollRect.scrollLeft(this.scrollRect.scrollLeft()-((this.vector.x-evt.pageX)/this.scrollRatio.left)); 
-			this.vector.x = evt.pageX;
+			$this.scrollRect.scrollLeft($this.scrollRect.scrollLeft()-(($this.vector.x-evt.pageX)/$this.scrollRatio.left)); 
+			$this.vector.x = evt.pageX;
 		});
 
 		return false;
@@ -157,26 +156,29 @@ $.widget("modkit.scrollbars", {
 
 	_handleScrollbarMouseDownVertical: function(evt)
 	{
-		var scrollAmt = (this.scrollHandleVertical.height()/this.scrollRatio.top)
+		var $this = $(evt.target).data("scrollbars");
+		var scrollAmt = ($this.scrollHandleVertical.height()/$this.scrollRatio.top)
 
-		if(evt.pageY > this.scrollHandleVertical.offset().top)
-			this.scrollRect.scrollTop( this.scrollRect.scrollTop() + scrollAmt );
+		if(evt.pageY > $this.scrollHandleVertical.offset().top)
+			$this.scrollRect.scrollTop( $this.scrollRect.scrollTop() + scrollAmt );
 		else
-			this.scrollRect.scrollTop( this.scrollRect.scrollTop() - scrollAmt );
+			$this.scrollRect.scrollTop( $this.scrollRect.scrollTop() - scrollAmt );
 		return false;
 	},
 	_handleScrollbarMouseDownHorizontal: function(evt)
 	{
-		var scrollAmt = this.scrollHandleHorizontal.width()/this.scrollRatio.left;
+		var $this = $(evt.target).data("scrollbars");
+		var scrollAmt = $this.scrollHandleHorizontal.width()/$this.scrollRatio.left;
 
-		if(evt.pageX > this.scrollHandleHorizontal.offset().left)
-			this.scrollRect.scrollLeft( this.scrollRect.scrollLeft() + scrollAmt );
+		if(evt.pageX > $this.scrollHandleHorizontal.offset().left)
+			$this.scrollRect.scrollLeft( $this.scrollRect.scrollLeft() + scrollAmt );
 		else
-			this.scrollRect.scrollLeft( this.scrollRect.scrollLeft() - scrollAmt );
+			$this.scrollRect.scrollLeft( $this.scrollRect.scrollLeft() - scrollAmt );
 		return false;
 	},
 /*------------------- Public Functions ----------------------*/
-	update: function() {
+	update: function()
+	{
 		this.scrollRatio = {top:this.element.height()/this.scrollContent.outerHeight(), 
 									left:this.element.width()/this.scrollContent.outerWidth()};
 		
@@ -200,7 +202,8 @@ $.widget("modkit.scrollbars", {
 			
 		this.scrollRect.scroll(); // bad form I know...
 	},
-	destroy: function() {
+	destroy: function()
+	{
 			$.Widget.prototype.destroy.apply(this, arguments); // default destroy
 			 // now do other stuff particular to this widget
 			
