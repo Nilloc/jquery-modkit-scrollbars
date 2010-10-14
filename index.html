@@ -21,12 +21,16 @@
     h1 { font-size: 3.8em; color: #0066ff; margin-bottom: 3px; }
     h1 .small { font-size: 0.4em; }
     h1 a { text-decoration: none }
-    h2 { font-size: 1.5em; color: #0066ff; }
-    h3 { text-align: center; color: #0066ff; }
+    h2 { font-size: 1.5em; color: #0066ff; border-bottom:1px solid #ddd;}
+    h3 { /*text-align: center;*/ color: #0066ff; font-size:1em; text-indent:1em; margin-top:2em;}
     a { color: #0066ff; }
     .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
     .download { float: right; }
-    pre { background: #000; color: #fff; padding: 15px;}
+    a:hover{
+      color:#ff9900;
+      text-decoration:underline;
+    }
+    pre { background: #999; color: #fff; padding: 15px; overflow:auto;}
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
     .footer { text-align:center; padding-top:30px; font-style: italic; }
   </style>
@@ -46,7 +50,7 @@
     </div>
 
     <h1><a href="http://github.com/Nilloc/jquery-scrollbars">jquery-scrollbars</a>
-      <span class="small">by <a href="http://github.com/Nilloc">Nilloc</a></span></h1>
+      <span class="small">by <a href="http://github.com/Nilloc">Collin Reisdorf</a></span></h1>
 
     <div class="description">
       Unobtrusive designer scrollbars. Works with custom css, and completely mimic standard scrollable divs (even native mouse wheel support).
@@ -59,42 +63,43 @@
     <p>Include jQuery, the jQuery UI widget factory (or more of the UI library) and the scrollStart/Stop plugin, then include the </p>
     
     <h2>Example</h2>
-    <p>HTML</p>
+    <h3>HTML</h3>
     <pre>
-      &lt;div class=&quot;scrollable&quot;&gt;
-        &lt;p&gt;A bunch of content that will force the containing div to scroll (if it&#x27;s overflow was set to &quot;auto&quot;, (or &quot;scroll&quot;)).&lt;/p&gt;
-        &lt;p&gt;Can be any combination of elements, or I think even raw text, though I haven&#x27;t tested that yet.&lt;/p&gt;
-        &lt;p&gt;And if your content doesn&#x27;t need to scroll not harm, you just won&#x27;t see anything change (also the scrollbars won&#x27;t be displayed, (event if you set the scrollable&#x27;s overflow to &quot;scroll&quot;))&lt;/p&gt;
-      &lt;/div&gt;
-    </pre>
-    <p>CSS</p>
+&lt;div class=&quot;scrollable&quot;&gt;
+  &lt;p&gt;A bunch of content that will force the containing div to scroll (if 
+  it&#x27;s overflow was set to &quot;auto&quot;, (or &quot;scroll&quot;)).&lt;/p&gt;
+  &lt;p&gt;Can be any combination of elements, or I think even raw text, though 
+  I haven&#x27;t tested that yet.&lt;/p&gt;
+  &lt;p&gt;And if your content doesn&#x27;t need to scroll not harm, you just 
+  won&#x27;t see anything change (also the scrollbars won&#x27;t be displayed, (event 
+  if you set the scrollable&#x27;s overflow to &quot;scroll&quot;))&lt;/p&gt;
+&lt;/div&gt;</pre>
+    <h3>CSS</h3>
     <pre>
-      Still working on cleaning that up...
-      For now just look at the included css file ;)
-    </pre>
-    <p>Javascript</p>
+Still working on cleaning that up...
+For now just look at the included css file ;)</pre>
+    <h3>Javascript</h3>
     <pre>
-      $(document).ready(function(){
-        $(&#x27;.scrollable&#x27;).scrollbars();
-      });
-    </pre>
+$(document).ready(function(){
+  $(&#x27;.scrollable&#x27;).scrollbars();
+});</pre>
     
     <h2>License</h2>
-    <p>The MIT License
+    <p>The MIT License</p>
 
-    Copyright (c) 2010 Collin Reisdorf
+    <p>Copyright (c) 2010 Collin Reisdorf</p>
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy
+    <p>Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
     in the Software without restriction, including without limitation the rights
     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
     copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
+    furnished to do so, subject to the following conditions:</p>
 
-    The above copyright notice and this permission notice shall be included in
-    all copies or substantial portions of the Software.
+    <p>The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.</p>
 
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
     AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -103,7 +108,7 @@
     THE SOFTWARE.</p>
     
     <h2>Authors</h2>
-    <p><a href="mailto:collin@modk.it">Collin Reisdorf</a></p>
+    <p><a href="http://github.com/Nilloc/jquery-scrollbars">Collin Reisdorf</a></p>
     
     <h2>Download</h2>
     <p>
