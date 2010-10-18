@@ -159,8 +159,8 @@ $.widget("modkit.scrollbars", {
 		console.log(evt);
 		
 		var $this = $(evt.target).data("scrollbars");
-		var scrollAmt = ($this.scrollHandleVertical.height()/$this.scrollRatio.top)
-
+		var scrollAmt = $this.element.innerHeight();
+		
 		if(evt.pageY > $this.scrollHandleVertical.offset().top)
 			$this.scrollRect.scrollTop( $this.scrollRect.scrollTop() + scrollAmt );
 		else
@@ -170,7 +170,7 @@ $.widget("modkit.scrollbars", {
 	_handleScrollbarMouseDownHorizontal: function(evt)
 	{
 		var $this = $(evt.target).data("scrollbars");
-		var scrollAmt = $this.scrollHandleHorizontal.width()/$this.scrollRatio.left;
+		var scrollAmt = $this.element.innerWidth();
 
 		if(evt.pageX > $this.scrollHandleHorizontal.offset().left)
 			$this.scrollRect.scrollLeft( $this.scrollRect.scrollLeft() + scrollAmt );
@@ -182,19 +182,22 @@ $.widget("modkit.scrollbars", {
 	update: function()
 	{
 		this.scrollRatio = {top:this.element.innerHeight()/this.scrollContent.outerHeight(), 
-									left:this.element.innerWidth()/this.scrollContent.outerWidth()};
+												left:this.element.innerWidth()/this.scrollContent.outerWidth()};
 		
 		var scrollPadding = {top:parseInt(this.scrollbarVertical.css('margin-top')) + parseInt(this.scrollbarVertical.css('margin-bottom')),
 												left:parseInt(this.scrollbarHorizontal.css('margin-left')) + parseInt(this.scrollbarHorizontal.css('margin-right'))}
 		
-		if(( < parseInt(this.scrollbarVertical.css("min-height")));
-			trace("It's smaller by this much:", this.element.height()*this.scrollRatio.top) - scrollPadding.top - parseInt(this.scrollbarVertical.css("min-height")))
+		if((this.element.height()*this.scrollRatio.top) - scrollPadding.top < parseInt(this.scrollbarVertical.css("min-height")))
+			this.scrollRatio.top = (this.element.innerHeight() + (this.element.height()*this.scrollRatio.top) - scrollPadding.top - parseInt(this.scrollbarVertical.css("min-height"))) / this.scrollContent.outerHeight();
+			
+		if((this.element.width()*this.scrollRatio.left) - scrollPadding.left < parseInt(this.scrollbarHorizontal.css("min-width")))
+			this.scrollRatio.top = (this.element.innerWidth() + (this.element.width()*this.scrollRatio.left) - scrollPadding.left - parseInt(this.scrollbarHorizontal.css("min-width"))) / this.scrollContent.outerWidth();
 		
-		this.scrollbarVertical.height(this.element.height() - scrollPadding.top);
-		this.scrollbarHorizontal.width(this.element.width() - scrollPadding.left);
+		this.scrollbarVertical.height(this.element.innerHeight() - scrollPadding.top);
+		this.scrollbarHorizontal.width(this.element.innerWidth() - scrollPadding.left);
 		
-		this.scrollHandleVertical.height((this.element.height()*this.scrollRatio.top) - scrollPadding.top);
-		this.scrollHandleHorizontal.width((this.element.width()*this.scrollRatio.left) - scrollPadding.left);
+		this.scrollHandleVertical.height((this.element.innerHeight()*this.scrollRatio.top) - scrollPadding.top);
+		this.scrollHandleHorizontal.width((this.element.innerWidth()*this.scrollRatio.left) - scrollPadding.left);
 		
 		if(this.scrollRatio.top >= 1)
 			this.scrollHandleVertical.css({display:"none"});

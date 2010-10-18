@@ -17,13 +17,22 @@
 			color:white;
 		}*/
 		
+		p{
+			margin:0;
+			text-indent:18px;
+		}
+		
+		p:first-child{
+			text-indent:0;
+		}
+		
 		.scrollable{
-			border:1px solid green;
+			border:1px solid #bada55;
 			/* padding in this will be an issue, because it will effect the containment, and is currently making this obtrusive...*/
 		}
 		.scrollContent{
 			width:250px; /* it's 2px narrower to account for the border, which proves that it's fully scrolling*/
-			border:1px solid blue;
+				border:1px solid #c07712;
 			padding:10px;
 		}
 		
@@ -79,7 +88,7 @@
 		#rightside{
 			width:300px;
 			height:200px;
-			border:1px solid red;
+			border:1px solid #123456;
 			position:absolute;
 			top:30px;
 			right:30px;
@@ -88,6 +97,14 @@
 		#rightside .scrollContent{
 			width:278px;
 		}
+		
+		#rightside .scrollbar.vertical{
+			right:0;
+			top:0;
+			height:100%;
+			
+			margin-bottom:10px;
+			}
 		
 		.left-button{
 			position:relative;
@@ -140,7 +157,8 @@
 	</div>
 	
 	<div id="rightside" class="scrollable">
-			<p style="font-size:48px; margin:0;">This is just a bunch of gibberish that will let me make sure that there isn't a conflict between the left and right scrollables, which I have a sneaking suspicion that there is right now&hellip;</p>
+		<p style="font-size:48px; margin:0;">This is just a bunch of gibberish that will let me make sure that there isn't a conflict between the left and right scrollables, which I have a sneaking suspicion that there is right now&hellip;</p>
+		<p style="color:#c07712">Nope, turned out to be another silly coding error, looks good now ;P</p>
 	</div>
 	
 	<input type="button" name="addText" value="Add Text" id="addText" class="left-button" />
