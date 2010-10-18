@@ -181,15 +181,14 @@ $.widget("modkit.scrollbars", {
 /*------------------- Public Functions ----------------------*/
 	update: function()
 	{
-		this.scrollRatio = {top:this.element.height()/this.scrollContent.outerHeight(), 
-									left:this.element.width()/this.scrollContent.outerWidth()};
-		
+		this.scrollRatio = {top:this.element.innerHeight()/this.scrollContent.outerHeight(), 
+									left:this.element.innerWidth()/this.scrollContent.outerWidth()};
 		
 		var scrollPadding = {top:parseInt(this.scrollbarVertical.css('margin-top')) + parseInt(this.scrollbarVertical.css('margin-bottom')),
 												left:parseInt(this.scrollbarHorizontal.css('margin-left')) + parseInt(this.scrollbarHorizontal.css('margin-right'))}
 		
-		
-		trace("scrollRatio:", this.scrollRatio.top, scrollPadding.top);
+		if(( < parseInt(this.scrollbarVertical.css("min-height")));
+			trace("It's smaller by this much:", this.element.height()*this.scrollRatio.top) - scrollPadding.top - parseInt(this.scrollbarVertical.css("min-height")))
 		
 		this.scrollbarVertical.height(this.element.height() - scrollPadding.top);
 		this.scrollbarHorizontal.width(this.element.width() - scrollPadding.left);
