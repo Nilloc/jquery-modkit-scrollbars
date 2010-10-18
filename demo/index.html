@@ -92,7 +92,7 @@
 			width:278px;
 		}
 		
-		#addText{
+		.left-button{
 			position:relative;
 			top:30px;
 			left:20px;
@@ -114,14 +114,21 @@
 	
 	<script type="text/javascript" charset="utf-8">
 	 $(function(){
-		 $('.scrollable').scrollbars();
+		$('#leftside').scrollbars();
+		$('#rightside').scrollbars({minOpacity:0.2, maxOpacity:0.5});
+		
 		
 		$('#addText').click(function(){
-			console.log($('#leftside .scrollContent').length)
 			$('#leftside .scrollContent').append('<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>');
 			$('#leftside').scrollbars('update');
-			// $('#leftside').scrollbars('destroy');
+		// $('#leftside').scrollbars('destroy');
 		});
+		
+		$('#removeText').click(function(){
+			$('#leftside .scrollContent p').last().remove();
+			$('#leftside').scrollbars('update');
+		});
+		
 	 });
 	</script>
 	
@@ -136,12 +143,10 @@
 	</div>
 	
 	<div id="rightside" class="scrollable">
-			<p>A Tale of Two Cities (1859) is a novel by Charles Dickens, set in London and Paris before and during the French Revolution. With well over 200 million copies sold, it is among the most famous works of fiction.[2]</p>
-			<p>The novel depicts the plight of the French peasantry demoralized by the French aristocracy in the years leading up to the revolution, the corresponding brutality demonstrated by the revolutionaries toward the former aristocrats in the early years of the revolution, and many unflattering social parallels with life in London during the same time period. It follows the lives of several protagonists through these events. The most notable are Charles Darnay and Sydney Carton. Darnay is a French once-aristocrat who falls victim to the indiscriminate wrath of the revolution despite his virtuous nature, and Carton is a dissipated British barrister who endeavours to redeem his ill-spent life out of his unrequited love for Darnay's wife, Lucie Manette.</p>
-			<p>The first book of the novel takes place in 1775. Jarvis Lorry, an employee of Tellson's Bank, is travelling from England to France to bring Dr. Alexandre Manette to London on his return trip. Before crossing into France, he meets 17-year-old Lucie Manette at Dover, and reveals to her that her father, Dr. Manette, is not dead, as she had been told; instead, he was a prisoner in the Bastille for eighteen years.</p>
-			<p>The End.</p>
+			<p style="font-size:48px; margin:0;">This is just a bunch of gibberish that will let me make sure that there isn't a conflict between the left and right scrollables, which I have a sneaking suspicion that there is right now&hellip;</p>
 	</div>
 	
-	<input type="button" name="addText" value="Add Text to Left Box" id="addText">
+	<input type="button" name="addText" value="Add Text" id="addText" class="left-button" />
+	<input type="button" name="removeText" value="Remove Last Paragraph" id="removeText" class="left-button" />
 </body>
 </html>

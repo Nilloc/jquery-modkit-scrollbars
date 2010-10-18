@@ -32,7 +32,8 @@ $.widget("modkit.scrollbars", {
 		minOpacity:0,
 		maxOpacity:0.5,
 		autoHide:true,
-		clickBehavior:"paging"
+		clickBehavior:"paging",
+		draggableContent:false
 	},
 	_create: function() {
 		// creation code for mywidget
@@ -155,6 +156,8 @@ $.widget("modkit.scrollbars", {
 
 	_handleScrollbarMouseDownVertical: function(evt)
 	{
+		console.log(evt);
+		
 		var $this = $(evt.target).data("scrollbars");
 		var scrollAmt = ($this.scrollHandleVertical.height()/$this.scrollRatio.top)
 
@@ -181,13 +184,17 @@ $.widget("modkit.scrollbars", {
 		this.scrollRatio = {top:this.element.height()/this.scrollContent.outerHeight(), 
 									left:this.element.width()/this.scrollContent.outerWidth()};
 		
+		
 		var scrollPadding = {top:parseInt(this.scrollbarVertical.css('margin-top')) + parseInt(this.scrollbarVertical.css('margin-bottom')),
 												left:parseInt(this.scrollbarHorizontal.css('margin-left')) + parseInt(this.scrollbarHorizontal.css('margin-right'))}
+		
+		
+		trace("scrollRatio:", this.scrollRatio.top, scrollPadding.top);
 		
 		this.scrollbarVertical.height(this.element.height() - scrollPadding.top);
 		this.scrollbarHorizontal.width(this.element.width() - scrollPadding.left);
 		
-		this.scrollHandleVertical.height((this.element.width()*this.scrollRatio.top) - scrollPadding.top);
+		this.scrollHandleVertical.height((this.element.height()*this.scrollRatio.top) - scrollPadding.top);
 		this.scrollHandleHorizontal.width((this.element.width()*this.scrollRatio.left) - scrollPadding.left);
 		
 		if(this.scrollRatio.top >= 1)
