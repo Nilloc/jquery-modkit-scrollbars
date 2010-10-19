@@ -31,6 +31,10 @@ $.widget("modkit.scrollbars", {
 	options: {
 		minOpacity:0,
 		maxOpacity:0.5,
+		activeClass:null,
+		hoverClass:null,
+		normalClass:null,
+		downClass:null,
 		autoHide:true,
 		clickBehavior:"paging",
 		draggableContent:false
