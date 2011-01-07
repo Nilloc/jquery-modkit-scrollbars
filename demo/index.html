@@ -82,8 +82,8 @@
   <script type="text/javascript" charset="utf-8">
   // <!--
    $(function(){
-    $('#leftside').scrollbars({hover:'scrollbarHover', down:'scrollbarDown', transitionSpeed:1});
-    $('#rightside').scrollbars({hover:'scrollbarHover', down:'scrollbarDown', transitionSpeed:1});
+    var leftside = $('#leftside').scrollbars({hover:'scrollbarHover', down:'scrollbarDown', transitionSpeed:1});
+    var rightside = $('#rightside').scrollbars({hover:'scrollbarHover', down:'scrollbarDown', transitionSpeed:1000});
     
     
     $('#addText').click(function(){
@@ -110,6 +110,21 @@
       $('#leftside .scrollRect').stop().animate({scrollTop:1000}, 1000);
       trace("cheating big time");
     });
+    
+    $('#resizeLeftSide').click(function(){
+      if(leftside.width() < 600){
+        leftside.animate({height:400, width:600}, {duration:"2000", step:resizeLeft});
+      }else
+      {
+        leftside.animate({height:250, width:250}, {duration:"2000", step:resizeLeft});
+      }
+    });
+    
+    function resizeLeft(evt)
+    {
+      trace('resizing', leftside.length);
+      leftside.scrollbars('update');
+    }
     
    });
    // -->
@@ -142,9 +157,10 @@
   
   <div id="buttons">
     <input type="button" name="addText" value="Add Text" id="addText" class="left-button" />
-    <input type="button" name="removeText" value="Remove Last Paragraph" id="removeText" class="left-button" />
+    <input type="button" name="removeText" value="Remove Last Paragraph" id="removeText" class="left-button" /><br/>
     <input type="button" name="scrollDown" value="Scroll Down" id="scrollDown" class="left-button" />
-    <input type="button" name="scrollDownHack" value="Scroll Down Hacknimation" id="scrollDownHack" class="left-button" />
+    <input type="button" name="scrollDownHack" value="Scroll Down Hacknimation" id="scrollDownHack" class="left-button" /><br/>
+    <input type="button" name="resizeLeftSide" value="Resize Left Side" id="resizeLeftSide" class="left-button" />
   </div>
 </body>
 </html>

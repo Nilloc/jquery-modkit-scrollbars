@@ -54,9 +54,7 @@ $.widget("modkit.scrollbars", {
     this.scrollContent = this.element.children();
     this.element.children().wrapAll('<div class="scrollRect" style="overflow:scroll;"/>');
     this.scrollRect = this.element.children(); // should probably be smarter
-    
-    this.scrollRect.width(this.element.innerWidth()+this.scrollbarWidth).height(this.element.innerHeight()+this.scrollbarWidth);
-    
+        
     // this.scrollbar = {vertical:null, horizontal:null};
     // this.scrollHandle = {vertical:null, horizontal:null};
     this.vector={x:0,y:0};
@@ -115,6 +113,9 @@ $.widget("modkit.scrollbars", {
   _transitionTo: function(evt, style)
   {
     var $this = $(evt.target).data("scrollbars");
+    
+    trace("transitioning to:", style);
+    
     if(style !== undefined)
     {
       if(isNaN(style))
@@ -157,11 +158,13 @@ $.widget("modkit.scrollbars", {
   {
     var $this = $(evt.target).data("scrollbars");
     $this._transitionTo(evt, $this.options.hover);
+    return false;
   },
   _handleMouseOut: function(evt)
   {
     var $this = $(evt.target).data("scrollbars");
     $this._transitionFrom(evt, $this.options.hover);
+    return false;
   },
   
   _handleMouseDown: function(evt)
@@ -236,6 +239,9 @@ $.widget("modkit.scrollbars", {
 /*------------------- Public Functions ----------------------*/
   update: function()
   {
+    trace("updating")
+    this.scrollRect.width(this.element.innerWidth()+this.scrollbarWidth).height(this.element.innerHeight()+this.scrollbarWidth);
+    
     this.scrollRatio = {top:this.element.innerHeight()/this.scrollContent.outerHeight(), 
                         left:this.element.innerWidth()/this.scrollContent.outerWidth()};
     
@@ -274,9 +280,7 @@ $.widget("modkit.scrollbars", {
     
     this.scrollHandleVertical.height((this.element.innerHeight()*this.scrollRatio.top) - scrollPadding.top);
     this.scrollHandleHorizontal.width((this.element.innerWidth()*this.scrollRatio.left) - scrollPadding.left);
-    
-    
-      
+        
     this.scrollRect.scroll(); // bad form? ...
   },
   
