@@ -1,167 +1,150 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-	<title>scrollbar_plugin</title>
-	
-	<style type="text/css" media="screen">
-		html, body{min-height:0; background:#fff;}
-	</style>
-	
-	<style type="text/css" media="screen">
-/*		body{
-			background:black;
-			color:white;
-		}*/
-		
-		p{
-			margin:0;
-			text-indent:18px;
-		}
-		
-		p:first-child{
-			text-indent:0;
-		}
-		
-		.scrollable{
-			border:1px solid #bada55;
-			/* padding in this will be an issue, because it will effect the containment, and is currently making this obtrusive...*/
-		}
-		.scrollContent{
-			width:250px; /* it's 2px narrower to account for the border, which proves that it's fully scrolling*/
-				border:1px solid #c07712;
-			padding:10px;
-		}
-		
-		.scrollbar{
-			background-color:transparent;
-			opacity:0;
-			
-			border:2px solid transparent;
-			-webkit-border-radius: 4px;
-			-moz-border-radius: 4px;
-			border-radius: 4px;
-			
-			min-height:6px;
-			min-width:6px;
-			
-			position:absolute; 
-			
-			margin:6px;
-			
-			cursor:pointer;
-		} 
-		
-		.scrollbar .handle{
-			opacity:0.5;
-			margin:0;
-			background-color:#000;
-			border:2px solid white;
-		}
-		
-		.scrollbar.vertical{
-			right:0;
-			top:0;
-			height:100%;
-			
-			margin-bottom:20px;
-		}
-		
-		.scrollbar.horizontal{
-			left:0;
-			bottom:0;
-			width:100%;
-			
-			margin-right:20px;
-		}
-		
-		#leftside{
-			height:200px;
-			width:200px;
-			top:30px;
-			left:20px;
-		}
-		
-		#rightside{
-			width:300px;
-			height:200px;
-			border:1px solid #123456;
-			position:absolute;
-			top:30px;
-			right:30px;
-		}
-		
-		#rightside .scrollContent{
-			width:278px;
-		}
-		
-		#rightside .scrollbar.vertical{
-			right:0;
-			top:0;
-			height:100%;
-			
-			margin-bottom:10px;
-			}
-		
-		.left-button{
-			position:relative;
-			top:30px;
-			left:20px;
-		}
-		
-	</style>
-	
-		
-	<script src="scripts/jquery-1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="scripts/scroll-startstop.events.jquery.js" type="text/javascript" charset="utf-8"></script>
-	<script src="scripts/jquery.trace.js" type="text/javascript" charset="utf-8"></script>
-	<script src="scripts/jquery.ui.widget.min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="../source/jquery.scrollbars.js" type="text/javascript" charset="utf-8"></script>
-	
-	<script type="text/javascript" charset="utf-8">
-		debugging=true;
-	</script>
-	
-	
-	<script type="text/javascript" charset="utf-8">
-	 $(function(){
-		$('#leftside').scrollbars();
-		$('#rightside').scrollbars({minOpacity:0.2, maxOpacity:0.5});
-		
-		
-		$('#addText').click(function(){
-			$('#leftside .scrollContent').append('<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>');
-			$('#leftside').scrollbars('update');
-		// $('#leftside').scrollbars('destroy');
-		});
-		
-		$('#removeText').click(function(){
-			$('#leftside .scrollContent p').last().remove();
-			$('#leftside').scrollbars('update');
-		});
-		
-	 });
-	</script>
-	
+  <title>scrollbar_plugin</title>
+  
+  <link rel="stylesheet" href="styles/jquery.scrollbars.css" type="text/css"/>
+  
+  <style type="text/css" media="screen">
+    html, body{min-height:0; background:#fff;}
+  </style>
+  
+  <style type="text/css" media="screen">
+/*    body{
+      background:black;
+      color:white;
+    }*/
+    
+    p{
+      margin:0;
+      text-indent:18px;
+    }
+    
+    p:first-child{
+      text-indent:0;
+    }
+    
+    .scrollable{
+      border:1px solid #bada55;
+      /* padding in this will be an issue, because it will effect the containment, and is currently making this obtrusive...*/
+    }
+    .scrollContent{
+      width:250px; /* it's 2px narrower to account for the border, which proves that it's fully scrolling*/
+      border:1px solid #c07712;
+      padding:10px;
+    }
+    
+    #leftside{
+      height:200px;
+      width:200px;
+      top:30px;
+      left:20px;
+    }
+    
+    #rightside{
+      width:300px;
+      height:200px;
+      border:1px solid #123456;
+      position:absolute;
+      top:30px;
+      right:30px;
+    }
+    
+    #rightside .scrollContent{
+      width:278px;
+    }
+    
+    .left-button{
+      position:relative;
+      top:30px;
+      left:20px;
+    }
+    
+  </style>
+  
+    
+  <script src="scripts/jquery-1.4.2.js" type="text/javascript" charset="utf-8"></script>
+  <script src="scripts/scroll-startstop.events.jquery.js" type="text/javascript" charset="utf-8"></script>
+  <script src="scripts/jquery.trace.js" type="text/javascript" charset="utf-8"></script>
+  <!-- // <script src="scripts/jquery.ui.widget.min.js" type="text/javascript" charset="utf-8"></script> -->
+  <script src="scripts/jquery-ui-1.8.7.custom.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../source/jquery.scrollbars.js" type="text/javascript" charset="utf-8"></script>
+  
+  <script type="text/javascript" charset="utf-8">
+    debugging=true;
+  </script>
+  
+  
+  <script type="text/javascript" charset="utf-8">
+  // <!--
+   $(function(){
+    $('#leftside').scrollbars({hover:'scrollbarHover', down:'scrollbarDown', transitionSpeed:1});
+    $('#rightside').scrollbars({hover:'scrollbarHover', down:'scrollbarDown', transitionSpeed:1});
+    
+    
+    $('#addText').click(function(){
+      $('#leftside .scrollContent').append('<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt' +
+      'ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo'+
+      ' consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint'+
+      ' occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>');
+      $('#leftside').scrollbars('update');
+    // $('#leftside').scrollbars('destroy');
+    });
+    
+    $('#removeText').click(function(){
+      $('#leftside .scrollContent p').last().remove();
+      $('#leftside').scrollbars('update');
+    });
+    
+    $('#scrollDown').click(function(){
+      $('#leftside').scrollbars('scrollTop', $('#leftside .scrollRect').scrollTop()+10);
+      trace($('#leftside .scrollRect').scrollTop());
+    });
+    
+    
+    $('#scrollDownHack').click(function(){
+      $('#leftside .scrollRect').stop().animate({scrollTop:1000}, 1000);
+      trace("cheating big time");
+    });
+    
+   });
+   // -->
+  </script>
+  
 </head>
 
 <body>
-	<div id="leftside" class="scrollable">
-			<p>A Tale of Two Cities (1859) is a novel by Charles Dickens, set in London and Paris before and during the French Revolution. With well over 200 million copies sold, it is among the most famous works of fiction.[2]</p>
-			<p>The novel depicts the plight of the French peasantry demoralized by the French aristocracy in the years leading up to the revolution, the corresponding brutality demonstrated by the revolutionaries toward the former aristocrats in the early years of the revolution, and many unflattering social parallels with life in London during the same time period. It follows the lives of several protagonists through these events. The most notable are Charles Darnay and Sydney Carton. Darnay is a French once-aristocrat who falls victim to the indiscriminate wrath of the revolution despite his virtuous nature, and Carton is a dissipated British barrister who endeavours to redeem his ill-spent life out of his unrequited love for Darnay's wife, Lucie Manette.</p>
-			<p>The first book of the novel takes place in 1775. Jarvis Lorry, an employee of Tellson's Bank, is travelling from England to France to bring Dr. Alexandre Manette to London on his return trip. Before crossing into France, he meets 17-year-old Lucie Manette at Dover, and reveals to her that her father, Dr. Manette, is not dead, as she had been told; instead, he was a prisoner in the Bastille for eighteen years.</p>
-			<p>The End.</p>
-	</div>
-	
-	<div id="rightside" class="scrollable">
-		<p style="font-size:48px; margin:0;">This is just a bunch of gibberish that will let me make sure that there isn't a conflict between the left and right scrollables, which I have a sneaking suspicion that there is right now&hellip;</p>
-		<p style="color:#c07712">Nope, turned out to be another silly coding error, looks good now ;P</p>
-	</div>
-	
-	<input type="button" name="addText" value="Add Text" id="addText" class="left-button" />
-	<input type="button" name="removeText" value="Remove Last Paragraph" id="removeText" class="left-button" />
+  <div id="leftside" class="scrollable">
+      <p>A Tale of Two Cities (1859) is a novel by Charles Dickens, set in London and Paris before and during the French Revolution. With 
+        well over 200 million copies sold, it is among the most famous works of fiction.[2]</p>
+      <p>The novel depicts the plight of the French peasantry demoralized by the French aristocracy in the years leading up to the revolution, 
+        the corresponding brutality demonstrated by the revolutionaries toward the former aristocrats in the early years of the revolution, 
+        and many unflattering social parallels with life in London during the same time period. It follows the lives of several protagonists 
+        through these events. The most notable are Charles Darnay and Sydney Carton. Darnay is a French once-aristocrat who falls victim to 
+        the indiscriminate wrath of the revolution despite his virtuous nature, and Carton is a dissipated British barrister who endeavours 
+        to redeem his ill-spent life out of his unrequited love for Darnay's wife, Lucie Manette.</p>
+      <p>The first book of the novel takes place in 1775. Jarvis Lorry, an employee of Tellson's Bank, is travelling from England to France 
+        to bring Dr. Alexandre Manette to London on his return trip. Before crossing into France, he meets 17-year-old Lucie Manette at Dover, 
+        and reveals to her that her father, Dr. Manette, is not dead, as she had been told; instead, he was a prisoner in the Bastille for 
+        eighteen years.</p>
+      <p>The End.</p>
+  </div>
+  
+  <div id="rightside" class="scrollable">
+    <p style="font-size:48px; margin:0;">This is just a bunch of gibberish that will let me make sure that there isn't a conflict between the 
+      left and right scrollables, which I have a sneaking suspicion that there is right now&hellip;</p>
+    <p style="color:#c07712">Nope, turned out to be another silly coding error, looks good now ;P</p>
+  </div>
+  
+  <div id="buttons">
+    <input type="button" name="addText" value="Add Text" id="addText" class="left-button" />
+    <input type="button" name="removeText" value="Remove Last Paragraph" id="removeText" class="left-button" />
+    <input type="button" name="scrollDown" value="Scroll Down" id="scrollDown" class="left-button" />
+    <input type="button" name="scrollDownHack" value="Scroll Down Hacknimation" id="scrollDownHack" class="left-button" />
+  </div>
 </body>
 </html>
