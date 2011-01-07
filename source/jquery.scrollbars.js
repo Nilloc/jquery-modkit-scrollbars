@@ -239,7 +239,6 @@ $.widget("modkit.scrollbars", {
 /*------------------- Public Functions ----------------------*/
   update: function()
   {
-    trace("updating")
     this.scrollRect.width(this.element.innerWidth()+this.scrollbarWidth).height(this.element.innerHeight()+this.scrollbarWidth);
     
     this.scrollRatio = {top:this.element.innerHeight()/this.scrollContent.outerHeight(), 
@@ -284,14 +283,22 @@ $.widget("modkit.scrollbars", {
     this.scrollRect.scroll(); // bad form? ...
   },
   
-  scrollTop: function(val)
+  resize: function(width, height)
   {
-    this.scrollRect.scrollTop(val);
+    this.elemet.width(width).height(height);
+    // this.scrollRect.width(this.element.innerWidth()+this.scrollbarWidth).height(this.element.innerHeight()+this.scrollbarWidth);
+    
+    this.update();
   },
   
-  scrollLeft: function(val)
+  scrollTop: function(val, time)
   {
-    this.scrollRect.scrollLeft(val);
+    this.scrollRect.stop().animate({scrollTop:val}, time);
+  },
+  
+  scrollLeft: function(val, time)
+  {
+    this.scrollRect.stop().animate({scrollLeft:val}, time);
   },
   
   destroy: function()

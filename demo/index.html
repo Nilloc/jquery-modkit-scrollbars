@@ -29,12 +29,12 @@
     }
     
     .scrollable{
-      border:1px solid #bada55;
+      outline:1px solid #bada55;
       /* padding in this will be an issue, because it will effect the containment, and is currently making this obtrusive...*/
     }
     .scrollContent{
       width:250px; /* it's 2px narrower to account for the border, which proves that it's fully scrolling*/
-      border:1px solid #c07712;
+      outline:1px solid #c07712;
       padding:10px;
     }
     
@@ -48,14 +48,14 @@
     #rightside{
       width:300px;
       height:200px;
-      border:1px solid #123456;
+      outline:1px solid #123456;
       position:absolute;
       top:30px;
       right:30px;
     }
     
     #rightside .scrollContent{
-      width:278px;
+      width:280px;
     }
     
     .left-button{
@@ -101,7 +101,7 @@
     });
     
     $('#scrollDown').click(function(){
-      $('#leftside').scrollbars('scrollTop', $('#leftside .scrollRect').scrollTop()+10);
+      $('#leftside').scrollbars('scrollTop', $('#leftside .scrollRect').scrollTop()+100);
       trace($('#leftside .scrollRect').scrollTop());
     });
     
@@ -113,19 +113,18 @@
     
     $('#resizeLeftSide').click(function(){
       if(leftside.width() < 600){
-        leftside.animate({height:400, width:600}, {duration:"2000", step:resizeLeft});
+        leftside.animate({height:400, width:600}, {duration:2000, step:resizeLeft, complete:resizeLeft});
       }else
       {
-        leftside.animate({height:250, width:250}, {duration:"2000", step:resizeLeft});
+        leftside.animate({height:250, width:250}, {duration:2000, step:resizeLeft, complete:resizeLeft});
       }
     });
     
     function resizeLeft(evt)
     {
-      trace('resizing', leftside.length);
       leftside.scrollbars('update');
     }
-    
+        
    });
    // -->
   </script>
