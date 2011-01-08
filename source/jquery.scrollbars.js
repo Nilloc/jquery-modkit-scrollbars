@@ -283,12 +283,30 @@ $.widget("modkit.scrollbars", {
     this.scrollRect.scroll(); // bad form? ...
   },
   
-  resize: function(width, height)
+  resize: function(width, height, time)
   {
-    this.elemet.width(width).height(height);
-    // this.scrollRect.width(this.element.innerWidth()+this.scrollbarWidth).height(this.element.innerHeight()+this.scrollbarWidth);
+    alert("setting scrollbars to:", width, height, time);
+    
+    width = (width == null)? this.element.width() : width;
+    height = (height == null)? this.element.height() : height;
+    
+    if(time == null)
+    {
+      this.element.width(width).height(height);
+      this.scrollRect.width(width+scrollbarWidth).height(height+scrollbarWidth);
+    }
     
     this.update();
+  },
+  
+  height: function(val, time)
+  {
+    this.resize(val, null, time);
+  },
+  
+  width: function(val, time)
+  {
+    this.resize(null, val, time);
   },
   
   scrollTop: function(val, time)
