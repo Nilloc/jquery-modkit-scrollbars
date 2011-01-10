@@ -30,11 +30,12 @@ THE SOFTWARE.
 $.widget("modkit.scrollbars", {
   // defaults basically make it work like a clickable and draggable version of the iphone scrollbar
   options: {
-    active:null,
-    hover:null,
-    down:null,
+    active:0.25,
+    hover:0.75,
+    down:1,
     transitionSpeed:800,
     autoHide:true, // TODO: unused so far
+    autoUpdate:false, // Adds a listner for $(window).resize, to adjust the size of the scrollbars
     clickBehavior:"paging", // TODO: also not used yet
     draggableContent:false // TODO: not sure this will belong in here, anyway not implimented yet either.
   },
@@ -76,7 +77,7 @@ $.widget("modkit.scrollbars", {
     this.element.append(this.scrollbarVertical).append(this.scrollbarHorizontal);
     
     this.scrollRect.data("scrollbars", this).scroll(this._moveScrollbar).bind('scrollStart', this._handleMouseOver).bind('scrollStop', this._handleMouseOut);
-    this.element.data("scrollbars", this).scroll(this._unScroll);
+    this.element.data("scrollbars", this).scroll(this._unScroll); // this might be causing some errors, added at the last minute
     
     this.scrollbarVertical.data("scrollbars", this).mouseover(this._handleMouseOver).mouseout(this._handleMouseOut).mousedown(this._handleScrollbarMouseDownVertical);
     this.scrollbarHorizontal.data("scrollbars", this).mouseover(this._handleMouseOver).mouseout(this._handleMouseOut).mousedown(this._handleScrollbarMouseDownHorizontal);
@@ -86,6 +87,15 @@ $.widget("modkit.scrollbars", {
     // jQuery.data(this.element, this); // don't think this can help...
     
     
+    var elem = this;
+    
+    if(this.options.autoUpdate)
+    {
+      console.log("is it autoupdating in the first place?", this.element.data('scrollbars'));
+      $(window).resize(function(){
+        elem.update();
+      });
+    }
     $(window).mouseup(function(){ // ends the mouse drag, works everywhere.
       $(this).unbind('mousemove');
     });
@@ -123,8 +133,8 @@ $.widget("modkit.scrollbars", {
     {
       if(isNaN(style))
       {
-        $this.scrollbarVertical.addClass(style, $this.options.transitionSpeed);
-        $this.scrollbarHorizontal.addClass(style, $this.options.transitionSpeed);
+        $this.scrollbarVertical.addClass(style); //, $this.options.transitionSpeed);
+        $this.scrollbarHorizontal.addClass(style); //, $this.options.transitionSpeed);
       }else
       {
         $this.scrollbarVertical.stop().animate({opacity: style}, $this.options.transitionSpeed);
@@ -281,7 +291,7 @@ $.widget("modkit.scrollbars", {
 /*------------------- Public Functions ----------------------*/
   update: function()
   {
-    trace("updating", this.element.attr("id"));
+    // trace("updating", this.element.attr("id"));
     
     this.scrollRect.width(this.element.innerWidth()+this.scrollbarWidth).height(this.element.innerHeight()+this.scrollbarWidth);
     
