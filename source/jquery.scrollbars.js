@@ -54,7 +54,10 @@ $.widget("modkit.scrollbars", {
     this.scrollContent = this.element.children();
     this.element.children().wrapAll('<div class="scrollRect" style="overflow:scroll;"/>');
     this.scrollRect = this.element.children(); // should probably be smarter
-        
+    
+    // TODO: see if this makes sense everywhere...
+    this.scrollContent.css({'min-width':'100%'});
+    
     // this.scrollbar = {vertical:null, horizontal:null};
     // this.scrollHandle = {vertical:null, horizontal:null};
     this.vector={x:0,y:0};
@@ -104,9 +107,9 @@ $.widget("modkit.scrollbars", {
     var $this = $(evt.target).data("scrollbars");
     // console.log(evt) evt.originalEvent.scrollHeight is cool...
     // console.log("moving scrollbar", $this.scrollRatio);
-    if(!!$this.scrollRatio){
-      $this.scrollHandleVertical.css({top:($this.scrollRect.scrollTop()*$this.scrollRatio.top)+"px"});
-      $this.scrollHandleHorizontal.css({left:($this.scrollRect.scrollLeft()*$this.scrollRatio.left)+"px"});
+    if($this && $this.scrollRatio){
+      $this.scrollHandleVertical.css({top:Math.round($this.scrollRect.scrollTop()*$this.scrollRatio.top)+"px"});
+      $this.scrollHandleHorizontal.css({left:Math.round($this.scrollRect.scrollLeft()*$this.scrollRatio.left)+"px"});
     }
   },
   
@@ -114,7 +117,7 @@ $.widget("modkit.scrollbars", {
   {
     var $this = $(evt.target).data("scrollbars");
     
-    trace("transitioning to:", style);
+    // trace("transitioning to:", style);
     
     if(style !== undefined)
     {
@@ -134,7 +137,7 @@ $.widget("modkit.scrollbars", {
   {
     var $this = $(evt.target).data("scrollbars");
     
-    trace("transitioning from", style);
+    // trace("transitioning from", style);
     
     if(style !== undefined)
     {
@@ -162,8 +165,13 @@ $.widget("modkit.scrollbars", {
   },
   _handleMouseOut: function(evt)
   {
-    var $this = $(evt.target).data("scrollbars");
-    $this._transitionFrom(evt, $this.options.hover);
+    try{
+      var $this = $(evt.target).data("scrollbars");
+      $this._transitionFrom(evt, $this.options.hover);
+    }
+    catch(err){
+      trace(err, evt.target);
+    }
     return false;
   },
   
@@ -233,12 +241,48 @@ $.widget("modkit.scrollbars", {
   },
   _unScroll: function(evt)
   {
-    // TODO: Find a more elegant solution for this issue, it's to keep users from selecting and then drag-scrolling the scroll element.
-    $(evt.target).data("scrollbars").element.scrollLeft(0).scrollTop(0);
+    // TODO: Find a more elegant solution for this issue, it's to keep users from selecting and then drag-scrolling the scroll element
+    try{
+      $(evt.target).data("scrollbars").element.scrollLeft(0).scrollTop(0);
+    }
+    catch(err){
+      trace(err, evt.target);
+    } // FIXME: Bletcherous Hack because I'm not sure 
+    
+    // return false;
   },
+
+/*------------------- Getters/Setters ----------------------*/
+  getScrollbarWidth: function()
+  {
+    return this.scrollbarWidth;
+  },
+  
+  height: function(val, time)
+  {
+    this.resize(val, null, time);
+  },
+  
+  width: function(val, time)
+  {
+    this.resize(null, val, time);
+  },
+  
+  scrollTop: function(val, time)
+  {
+    this.scrollRect.stop().animate({scrollTop:val}, time);
+  },
+  
+  scrollLeft: function(val, time)
+  {
+    this.scrollRect.stop().animate({scrollLeft:val}, time);
+  },
+
 /*------------------- Public Functions ----------------------*/
   update: function()
   {
+    trace("updating", this.element.attr("id"));
+    
     this.scrollRect.width(this.element.innerWidth()+this.scrollbarWidth).height(this.element.innerHeight()+this.scrollbarWidth);
     
     this.scrollRatio = {top:this.element.innerHeight()/this.scrollContent.outerHeight(), 
@@ -277,8 +321,8 @@ $.widget("modkit.scrollbars", {
     this.scrollbarVertical.height(this.element.innerHeight() - scrollPadding.top);
     this.scrollbarHorizontal.width(this.element.innerWidth() - scrollPadding.left);
     
-    this.scrollHandleVertical.height((this.element.innerHeight()*this.scrollRatio.top) - scrollPadding.top);
-    this.scrollHandleHorizontal.width((this.element.innerWidth()*this.scrollRatio.left) - scrollPadding.left);
+    this.scrollHandleVertical.height(Math.round((this.element.innerHeight()*this.scrollRatio.top) - scrollPadding.top));
+    this.scrollHandleHorizontal.width(Math.round((this.element.innerWidth()*this.scrollRatio.left) - scrollPadding.left));
         
     this.scrollRect.scroll(); // bad form? ...
   },
@@ -297,26 +341,6 @@ $.widget("modkit.scrollbars", {
     }
     
     this.update();
-  },
-  
-  height: function(val, time)
-  {
-    this.resize(val, null, time);
-  },
-  
-  width: function(val, time)
-  {
-    this.resize(null, val, time);
-  },
-  
-  scrollTop: function(val, time)
-  {
-    this.scrollRect.stop().animate({scrollTop:val}, time);
-  },
-  
-  scrollLeft: function(val, time)
-  {
-    this.scrollRect.stop().animate({scrollLeft:val}, time);
   },
   
   destroy: function()
