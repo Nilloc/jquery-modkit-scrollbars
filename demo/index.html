@@ -17,13 +17,17 @@
     p{margin:0;text-indent:18px;}
     p:first-child{text-indent:0;}
     .scrollable{outline:1px solid #bada55;}
-    .scrollContent{outline:1px solid #c07712; padding:10px; background:#c07712;}
+    .scrollContent{background:rgba(200, 100, 0, 0.3);}
     #leftside{height:200px; width:200px; top:30px; left:20px;}
     #rightside{width:300px; height:200px; outline:1px solid #123456; position:absolute; top:30px; right:30px;}
     #rightside .scrollContent{width:280px;}
     #leftside .scrollContent{width:250px;}
     #center{margin:100px; height:100px; outline:1px solid #bada55; overflow:auto;}
     .left-button{position:relative; top:30px; left:20px;}
+    
+    
+    #rounded_test{border-radius:10px; -webkit-box-shadow:inset 0 5px 10px #000; margin-top:40px; height:100px; padding:10px 30px 10px 10px; background:DarkOliveGreen; overflow:hidden;}
+    
   </style>
   
     
@@ -45,6 +49,7 @@
     var leftside = $('#leftside').scrollbars({hover:'scrollbarHover', down:'scrollbarDown', transitionSpeed:1});
     var rightside = $('#rightside').scrollbars({hover:'scrollbarHover', down:'scrollbarDown', transitionSpeed:1000});
     var center = $('#center').scrollbars({autoUpdate:true});
+    var padded = $('#rounded_test').scrollbars({updateInterval:1000});
     
     $('#addText').click(function(){
       $('#leftside .scrollContent').append('<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt' +
@@ -122,6 +127,22 @@
     <input type="button" name="scrollDown" value="Scroll Down" id="scrollDown" class="left-button" />
     <input type="button" name="scrollDownHack" value="Scroll Down Hacknimation" id="scrollDownHack" class="left-button" /><br/>
     <input type="button" name="resizeLeftSide" value="Resize Left Side" id="resizeLeftSide" class="left-button" />
+  </div>
+  
+  <div id="rounded_test">
+     <p>A Tale of Two Cities (1859) is a novel by Charles Dickens, set in London and Paris before and during the French Revolution. With 
+        well over 200 million copies sold, it is among the most famous works of fiction.[2]</p>
+      <p>The novel depicts the plight of the French peasantry demoralized by the French aristocracy in the years leading up to the revolution, 
+        the corresponding brutality demonstrated by the revolutionaries toward the former aristocrats in the early years of the revolution, 
+        and many unflattering social parallels with life in London during the same time period. It follows the lives of several protagonists 
+        through these events. The most notable are Charles Darnay and Sydney Carton. Darnay is a French once-aristocrat who falls victim to 
+        the indiscriminate wrath of the revolution despite his virtuous nature, and Carton is a dissipated British barrister who endeavours 
+        to redeem his ill-spent life out of his unrequited love for Darnay's wife, Lucie Manette.</p>
+      <p>The first book of the novel takes place in 1775. Jarvis Lorry, an employee of Tellson's Bank, is travelling from England to France 
+        to bring Dr. Alexandre Manette to London on his return trip. Before crossing into France, he meets 17-year-old Lucie Manette at Dover, 
+        and reveals to her that her father, Dr. Manette, is not dead, as she had been told; instead, he was a prisoner in the Bastille for 
+        eighteen years.</p>
+      <p>The End.</p>
   </div>
   
   <div id="center">

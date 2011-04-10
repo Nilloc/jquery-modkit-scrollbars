@@ -1,7 +1,7 @@
 /**
 jQuery Scrollbars
 @version  v0.1
-@author   Collin Reisdorf
+@author   Collin Reisdorf, Edward Baafi
 
 @license  The MIT License
 
@@ -27,6 +27,22 @@ THE SOFTWARE.
 
 */
 
+(function(){
+
+  var originalAppend = $.fn.append;
+  $.fn.append = function(){
+      var scrollContent = this.find(".scrollContent"); // might be faster as "first" or "nearest (closest?)"
+    if (this.hasClass("scrollPane") && scrollContent.length > 0) {
+      return originalAppend.apply(scrollContent.first(), arguments);
+    }
+    else{
+      return originalAppend.apply(this, arguments);
+    }
+  };
+  
+})();
+
+
 $.widget("modkit.scrollbars", {
   // defaults basically make it work like a clickable and draggable version of the iphone scrollbar
   options: {
@@ -36,6 +52,7 @@ $.widget("modkit.scrollbars", {
     transitionSpeed:800,
     autoHide:true, // TODO: unused so far
     autoUpdate:false, // Adds a listner for $(window).resize, to adjust the size of the scrollbars
+    updateInterval:0, // if this is set higher then 0 it will continuously update the scrollbars so "update" doesn't need to be manually called
     clickBehavior:"paging", // TODO: also not used yet
     draggableContent:false // TODO: not sure this will belong in here, anyway not implimented yet either.
   },
@@ -44,7 +61,8 @@ $.widget("modkit.scrollbars", {
     // creation code for mywidget
     this.scrollbarWidth = this._getScrollbarWidth();
     this.element.addClass('scrollPane');
-    this.element.css({overflow:'hidden'});
+    this.element.padding = [this.element.css('padding-top'), this.element.css('padding-right'), this.element.css('padding-bottom'), this.element.css('padding-left')];
+    this.element.css({overflow:'hidden', padding:0});
     
     // this should not overwrite the existing, if it is fixed or absolute...
     if(this.element.css("position") != "absolute" && this.element.css("position") != "fixed ") 
@@ -53,11 +71,12 @@ $.widget("modkit.scrollbars", {
     // more globally, we'll have to pass the css from the scrollable to the scrollContent at some point. or else not reparent.
     this.element.children().wrapAll('<div class="scrollContent"/>');
     this.scrollContent = this.element.children();
+    this.scrollContent.css({padding:this.element.padding.join(" ")});
     this.element.children().wrapAll('<div class="scrollRect" style="overflow:scroll;"/>');
     this.scrollRect = this.element.children(); // should probably be smarter
     
     // TODO: see if this makes sense everywhere...
-    this.scrollContent.css({'min-width':'100%'});
+    // this.scrollContent.css({'min-width':'100%'});
     
     // this.scrollbar = {vertical:null, horizontal:null};
     // this.scrollHandle = {vertical:null, horizontal:null};
@@ -70,6 +89,8 @@ $.widget("modkit.scrollbars", {
     this.scrollHandleHorizontal = $('<div class="scrollbar handle horizontal"></div>');
     
     // TODO: Impliment arrows here.
+    
+    
     
     this.scrollbarVertical.append(this.scrollHandleVertical);
     this.scrollbarHorizontal.append(this.scrollHandleHorizontal);
@@ -91,7 +112,7 @@ $.widget("modkit.scrollbars", {
     
     if(this.options.autoUpdate)
     {
-      console.log("is it autoupdating in the first place?", this.element.data('scrollbars'));
+      // console.log("is it autoupdating in the first place?", this.element.data('scrollbars'));
       $(window).resize(function(){
         elem.update();
       });
@@ -99,6 +120,13 @@ $.widget("modkit.scrollbars", {
     $(window).mouseup(function(){ // ends the mouse drag, works everywhere.
       $(this).unbind('mousemove');
     });
+    
+    if(this.options.updateInterval > 0)
+    {
+      if(this.options.updateInterval < 200) this.options.updateInterval = 200; // keeps the user from setting a value that will kill the browser.
+      this.updateInterval = setInterval($.proxy(this.update, this), this.options.updateInterval);
+      // return false; 
+    }
     
     this.update();
   },
@@ -153,8 +181,8 @@ $.widget("modkit.scrollbars", {
     {
       if(isNaN(style))
       {
-        $this.scrollbarVertical.removeClass(style, $this.options.transitionSpeed);
-        $this.scrollbarHorizontal.removeClass(style, $this.options.transitionSpeed);
+        $this.scrollbarVertical.removeClass(style);//, $this.options.transitionSpeed);
+        $this.scrollbarHorizontal.removeClass(style);//, $this.options.transitionSpeed);
       }else
       {
         // I haven't got an idea for how to undo an opacity change yet, but it'll come to me, maybe we should store starting opacity in transitionTo
@@ -227,7 +255,7 @@ $.widget("modkit.scrollbars", {
   // TODO: Normalize these too, since I can detect the ID of the clicked item.
   _handleScrollbarMouseDownVertical: function(evt)
   {
-    console.log(evt);
+    // console.log(evt);
     
     var $this = $(evt.target).data("scrollbars");
     var scrollAmt = $this.element.innerHeight();
@@ -288,10 +316,22 @@ $.widget("modkit.scrollbars", {
     this.scrollRect.stop().animate({scrollLeft:val}, time);
   },
 
+  setOverflow: function(type)
+  {
+    switch(type)
+    {
+      case "visible":
+        // set the relative position of the scrollContent to the current scrollTop;
+        break;
+      default:
+        // set the scrollTop to the current relative postion with the new ratio.
+        break;
+    }
+  },
 /*------------------- Public Functions ----------------------*/
   update: function()
   {
-    // trace("updating", this.element.attr("id"));
+    trace("updating"); //, this.element.attr("id"));
     
     this.scrollRect.width(this.element.innerWidth()+this.scrollbarWidth).height(this.element.innerHeight()+this.scrollbarWidth);
     
@@ -326,7 +366,7 @@ $.widget("modkit.scrollbars", {
       this.scrollRatio.top = (this.element.innerHeight() + (this.element.height()*this.scrollRatio.top) - scrollPadding.top - parseInt(this.scrollbarVertical.css("min-height"), 10)) / this.scrollContent.outerHeight();
       
     if((this.element.width()*this.scrollRatio.left) - scrollPadding.left < parseInt(this.scrollbarHorizontal.css("min-width"), 10))
-      this.scrollRatio.top = (this.element.innerWidth() + (this.element.width()*this.scrollRatio.left) - scrollPadding.left - parseInt(this.scrollbarHorizontal.css("min-width"), 10)) / this.scrollContent.outerWidth();
+      this.scrollRatio.top = (this.element.innerWidth() + (this.element.width()*this.scrollRatio.left) - scrollPadding.left - parseInt(this.scrollbarHorizontal.css("min-width"), 10)) / this.gg.outerWidth();
     
     this.scrollbarVertical.height(this.element.innerHeight() - scrollPadding.top);
     this.scrollbarHorizontal.width(this.element.innerWidth() - scrollPadding.left);
@@ -355,10 +395,12 @@ $.widget("modkit.scrollbars", {
   
   destroy: function()
   {
-    this.element.addClass('scrollPane');
+    this.element.removeClass('scrollPane');
     
     $.Widget.prototype.destroy.apply(this, arguments); // default destroy
      // now do other stuff particular to this widget
+    
+    clearInterval(this.updateInterval);
     
     // $(window).unbind('mousemove'); // shouldn't need unbinding unless the widget is destroyed mid drag...
     
