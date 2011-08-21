@@ -26,63 +26,22 @@
 			text-indent:0;
 		}
 		
-		.scrollable{
-			border:1px solid #bada55;
-			/* padding in this will be an issue, because it will effect the containment, and is currently making this obtrusive...*/
-		}
-		.scrollContent{
-			width:250px; /* it's 2px narrower to account for the border, which proves that it's fully scrolling*/
-				border:1px solid #c07712;
-			padding:10px;
-		}
-		
-		.scrollbar{
-			background-color:transparent;
-			opacity:0;
-			
-			border:2px solid transparent;
-			-webkit-border-radius: 4px;
-			-moz-border-radius: 4px;
-			border-radius: 4px;
-			
-			min-height:6px;
-			min-width:6px;
-			
-			position:absolute; 
-			
-			margin:6px;
-			
-			cursor:pointer;
-		} 
-		
-		.scrollbar .handle{
-			opacity:0.5;
-			margin:0;
-			background-color:#000;
-			border:2px solid white;
-		}
-		
-		.scrollbar.vertical{
-			right:0;
-			top:0;
-			height:100%;
-			
-			margin-bottom:20px;
-		}
-		
-		.scrollbar.horizontal{
-			left:0;
-			bottom:0;
-			width:100%;
-			
-			margin-right:20px;
-		}
-		
 		#leftside{
 			height:200px;
 			width:200px;
 			top:30px;
 			left:20px;
+			
+			position:relative;
+		}
+		
+		#leftside p{
+		  width:300px;
+		}
+		
+		#leftside p.shifted{
+		  position:absolute;
+		  left:20px;
 		}
 		
 		#rightside{
@@ -94,23 +53,25 @@
 			right:30px;
 		}
 		
-		#rightside .scrollContent{
-			width:278px;
-		}
-		
-		#rightside .scrollbar.vertical{
-			right:0;
-			top:0;
-			height:100%;
-			
-			margin-bottom:10px;
-			}
-		
 		.left-button{
 			position:relative;
 			top:30px;
 			left:20px;
 		}
+		
+		.scrollable{overflow:auto;}
+		
+		.scrollbar{background-color:#eee; opacity:0.5;
+    -webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;min-height:10px;min-width:10px;position:absolute;margin:6px;cursor:pointer;}
+    .scrollbar .handle{background-color:#000; opacity:0.25; margin:0;}
+    .scrollbar.vertical{right:0;top:0;height:100%;min-height:20px;margin-bottom:20px;}
+    .scrollbar.horizontal{left:0;bottom:0;width:100%;min-width:20px;margin-right:20px;}
+    .scrollbarHover .scrollbar.handle{opacity:0.5;}
+    .scrollbarDown .scrollbar.handle{opacity:1;}
+    .scrollPane{-webkit-user-select:none;-moz-user-select:-moz-none;}
+    .scrollContent{-webkit-user-select:text;-moz-user-select:-text;}
+    .scrollbar.vertical.noHorizontal{margin-bottom:6px !important;}
+    .scrollbar.horizontal.noVertical{margin-right:6px !important;}
 		
 	</style>
 	
@@ -128,8 +89,8 @@
 	
 	<script type="text/javascript" charset="utf-8">
 	 $(function(){
-		$('#leftside').scrollbars();
-		$('#rightside').scrollbars({minOpacity:0.2, maxOpacity:0.5});
+    $('#leftside').scrollbars();
+    $('#rightside').scrollbars({minOpacity:0.2, maxOpacity:0.5});
 		
 		
 		$('#addText').click(function(){
@@ -151,7 +112,7 @@
 <body>
 	<div id="leftside" class="scrollable">
 			<p>A Tale of Two Cities (1859) is a novel by Charles Dickens, set in London and Paris before and during the French Revolution. With well over 200 million copies sold, it is among the most famous works of fiction.[2]</p>
-			<p>The novel depicts the plight of the French peasantry demoralized by the French aristocracy in the years leading up to the revolution, the corresponding brutality demonstrated by the revolutionaries toward the former aristocrats in the early years of the revolution, and many unflattering social parallels with life in London during the same time period. It follows the lives of several protagonists through these events. The most notable are Charles Darnay and Sydney Carton. Darnay is a French once-aristocrat who falls victim to the indiscriminate wrath of the revolution despite his virtuous nature, and Carton is a dissipated British barrister who endeavours to redeem his ill-spent life out of his unrequited love for Darnay's wife, Lucie Manette.</p>
+			<p class="shifted">The novel depicts the plight of the French peasantry demoralized by the French aristocracy in the years leading up to the revolution, the corresponding brutality demonstrated by the revolutionaries toward the former aristocrats in the early years of the revolution, and many unflattering social parallels with life in London during the same time period. It follows the lives of several protagonists through these events. The most notable are Charles Darnay and Sydney Carton. Darnay is a French once-aristocrat who falls victim to the indiscriminate wrath of the revolution despite his virtuous nature, and Carton is a dissipated British barrister who endeavours to redeem his ill-spent life out of his unrequited love for Darnay's wife, Lucie Manette.</p>
 			<p>The first book of the novel takes place in 1775. Jarvis Lorry, an employee of Tellson's Bank, is travelling from England to France to bring Dr. Alexandre Manette to London on his return trip. Before crossing into France, he meets 17-year-old Lucie Manette at Dover, and reveals to her that her father, Dr. Manette, is not dead, as she had been told; instead, he was a prisoner in the Bastille for eighteen years.</p>
 			<p>The End.</p>
 	</div>
