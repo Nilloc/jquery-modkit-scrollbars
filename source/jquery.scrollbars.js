@@ -30,18 +30,23 @@ THE SOFTWARE.
 (function(){
 
   var originalAppend = $.fn.append;
-  // var originalChildren = $.fn.children;
+
   $.fn.append = function(){
-      var scrollContent = this.find(".scrollContent"); // might be faster as "first" or "nearest (closest?)"
-      console.log("appending", arguments)
+      var o, scrollContent = this.find(".scrollContent"); // might be faster as "first" or "nearest (closest?)"
+      var scrollPane = this.parents(".scrollPane");
     if (this.hasClass("scrollPane") && scrollContent.length > 0) {
-      return originalAppend.apply(scrollContent.first(), arguments);
+      o = originalAppend.apply(scrollContent.first(), arguments);
+      this.scrollbars('update');
+      return o;
     }
     else{
-      return originalAppend.apply(this, arguments);
-    }
-    
-
+      o = originalAppend.apply(this, arguments);
+      
+      trace('ner');
+      if( $(this).parents('.scrollPane').length > 0) //$(this).parents('.scrollPane').attr('id')+"\n"+$(this).find('.scrollPane').attr('id'))//.scrollbars('update'))
+         $(this).parents('.scrollPane').data('scrollbars').scrollbars('update');
+      return o;
+    }    
   };
   
   $.fn._append = function(){
@@ -62,7 +67,7 @@ THE SOFTWARE.
   //       return originalChildren.apply(this, arguments);
   //     }
   //   };
-})();
+})( jQuery );
 
 
 $.widget("modkit.scrollbars", {
@@ -81,6 +86,8 @@ $.widget("modkit.scrollbars", {
   },
   _create: function()
   {
+    trace("creating", this.element.attr('id'))
+    
     // creation code for mywidget
     this.scrollbarWidth = this._getScrollbarWidth();
     this.element.addClass('scrollPane');
@@ -90,7 +97,6 @@ $.widget("modkit.scrollbars", {
     // this should not overwrite the existing, if it is fixed or absolute...
     if(this.element.css("position") != "absolute" && this.element.css("position") != "fixed ") 
       this.element.css({position:"relative"});
-    
     
     // more globally, we'll have to pass the css from the scrollable to the scrollContent at some point. or else not reparent.
     this.element.children().wrapAll('<div class="scrollContent" style="float:left;"/>');
@@ -103,15 +109,18 @@ $.widget("modkit.scrollbars", {
     this.scrollRect = this.element.children(); // should probably be smarter
     
     // TODO: see if this makes sense everywhere...
-    if(this.options.fillWidth && !(this.element.padding.left != '0px' || this.element.padding != '0px'))
-      this.scrollContent.css({'min-width':'100%'});
+    
+    // FIXME: This needs to be differen when the styles object is added
+     if(this.options.fillWidth && !(this.element.padding.left != '0px' || this.element.padding != '0px'))
+       this.scrollContent.css({'min-width':'100%'});
+
     
     // this.scrollbar = {vertical:null, horizontal:null};
     // this.scrollHandle = {vertical:null, horizontal:null};
     this.vector={x:0,y:0};
     
-    this.scrollbarVertical = $('<div class="scrollbar bar vertical TESTER"></div>'); // this could be shorter if i reverse the order and return the $(new html).append...
-    this.scrollbarHorizontal = $('<div class="scrollbar bar horizontal TESTER"></div>');
+    this.scrollbarVertical = $('<div class="scrollbar bar vertical"></div>'); // this could be shorter if i reverse the order and return the $(new html).append...
+    this.scrollbarHorizontal = $('<div class="scrollbar bar horizontal"></div>');
     
     this.scrollHandleVertical = $('<div class="scrollbar handle vertical"></div>');
     this.scrollHandleHorizontal = $('<div class="scrollbar handle horizontal"></div>');
@@ -138,7 +147,7 @@ $.widget("modkit.scrollbars", {
     
     if(this.options.autoUpdate)
     {
-      console.log("is it autoupdating in the first place?", this.element.data('scrollbars'));
+      // console.log("is it autoupdating in the first place?", this.element.data('scrollbars'));
       $(window).resize(function(){
         elem.update();
       });
@@ -149,7 +158,7 @@ $.widget("modkit.scrollbars", {
     
     if(this.options.updateInterval > 0)
     {
-      if(this.options.updateInterval < 30) this.options.updateInterval = 30; // keeps the user from setting a value that will kill the browser.
+      if(this.options.updateInterval < 200) this.options.updateInterval = 200; // keeps the user from setting a value that will kill the browser.
       this.updateInterval = setInterval($.proxy(this.update, this), this.options.updateInterval);
       // return false; 
     }
@@ -170,7 +179,7 @@ $.widget("modkit.scrollbars", {
   {
     var $this = $(evt.target).data("scrollbars");
     // console.log(evt) evt.originalEvent.scrollHeight is cool...
-    console.log("moving scrollbar", $this.scrollRatio);
+    // console.log("moving scrollbar", $this.scrollRatio);
     if($this && $this.scrollRatio){
       $this.scrollHandleVertical.css({top:Math.round($this.scrollRect.scrollTop()*$this.scrollRatio.top)+"px"});
       $this.scrollHandleHorizontal.css({left:Math.round($this.scrollRect.scrollLeft()*$this.scrollRatio.left)+"px"});
@@ -357,8 +366,8 @@ $.widget("modkit.scrollbars", {
 /*------------------- Public Functions ----------------------*/
   update: function()
   {
-    //trace("updating"); //, this.element.attr("id"));
-    
+    // trace("updating", this.scrollRect, this.element.attr('id')); //, this.element.attr("id"));
+      
     this.scrollRect.width(this.element.innerWidth()+this.scrollbarWidth).height(this.element.innerHeight()+this.scrollbarWidth);
     
     // console.log("height of children: ", this.scrollContent.children().height())
@@ -367,9 +376,6 @@ $.widget("modkit.scrollbars", {
     
     this.scrollRatio = {top:this.element.innerHeight()/this.scrollContent.outerHeight(), 
                         left:this.element.innerWidth()/this.scrollContent.outerWidth()};
-    
-    console.log(this.element.attr("id"), this.scrollRatio)
-    
     
     if(this.scrollRatio.top >= 1){
       this.scrollHandleVertical.css({display:"none"});
