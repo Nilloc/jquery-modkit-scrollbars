@@ -52,15 +52,15 @@ THE SOFTWARE.
           $.extend( settings, options );
         }
         
-        // Tooltip plugin code here
         
-      
         var $this = $(this),
             data = $this.data('scrollbar'),
             $scrollPane = $this.addClass('scrollPane');
             
             
         if (! data) {
+          
+          $this.options = settings;
           
           // // creation code for mywidget
           $this.scrollbarWidth = $.fn.scrollbars('_getScrollbarWidth');
@@ -117,7 +117,7 @@ THE SOFTWARE.
           
           $this._append($this.scrollbarVertical)._append(this.scrollbarHorizontal);
           
-        //   this.scrollRect.data("scrollbars", this).scroll(this._moveScrollbar).bind('scrollStart', this._handleMouseOver).bind('scrollStop', this._handleMouseOut);
+          $this.scrollRect.data("scrollbars", $this).scroll($.fn.scrollbars('_moveScrollbar', $this)).bind('scrollStart', $.fn.scrollbars('_handleMouseOver', $this)).bind('scrollStop', $.fn.scrollbars('_handleMouseOut', $this) );
         //   $this.data("scrollbars", this).scroll(this._unScroll); // this might be causing some errors, added at the last minute
         //   
         //   this.scrollbarVertical.data("scrollbars", this).mouseover(this._handleMouseOver).mouseout(this._handleMouseOut).mousedown(this._handleScrollbarMouseDownVertical);
@@ -149,14 +149,14 @@ THE SOFTWARE.
         //   }
         //   
         // 
-        //   $(this).data('scrollbar', {
-        //     target : $this,
-        //     scrollPane : $scrollPane
-        //   });
+        $(this).data('scrollbar', {
+          target : $this,
+          scrollPane : $scrollPane // a bit redunda
+        });
         //   
-       }
+        }
         
-        // console.log(this)
+        // console.log($this.data('scrollbar'))
         
         console.log('already created, updating now')
         
@@ -174,9 +174,9 @@ THE SOFTWARE.
       return f-s;
     },
 
-    _moveScrollbar: function(evt){
-      var $this = $(evt.target).data("scrollbars");
-      // console.log(evt) evt.originalEvent.scrollHeight is cool...
+    _moveScrollbar: function($target){
+      console.log($target)
+      var $this = $target; //$(evt.target).data("scrollbars");
       // console.log("moving scrollbar", $this.scrollRatio);
       if($this && $this.scrollRatio){
         $this.scrollHandleVertical.css({top:Math.round($this.scrollRect.scrollTop()*$this.scrollRatio.top)+"px"});
@@ -228,6 +228,9 @@ THE SOFTWARE.
   /*------------------- Event Handlers ----------------------*/
     _handleMouseOver: function(evt){
       var $this = $(evt.target).data("scrollbars");
+      
+      console.log()
+      
       $this._transitionTo(evt, $this.options.hover);
       return false;
     },
