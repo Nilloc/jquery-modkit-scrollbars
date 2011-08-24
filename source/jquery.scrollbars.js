@@ -113,7 +113,7 @@ THE SOFTWARE.
           $this.scrollbarVertical._append($this.scrollHandleVertical);
           $this.scrollbarHorizontal._append($this.scrollHandleHorizontal);
           
-          $this._append($this.scrollbarVertical)._append(this.scrollbarHorizontal);
+          $this._append($this.scrollbarVertical)._append($this.scrollbarHorizontal);
           
           $this.scrollRect.data("scrollbars", $this).scroll(methods._moveScrollbar).bind('scrollStart.scrollbars', methods._handleMouseOver).bind('scrollStop', methods._handleMouseOut );
           $this.data("scrollbars", $this).scroll(methods._unScroll); // this might be causing some errors, added at the last minute
