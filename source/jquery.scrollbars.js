@@ -158,7 +158,7 @@ THE SOFTWARE.
         
         // console.log($this.data('scrollbars'))
         
-        console.log('already created, updating now')
+        // console.log('already created, updating now')
         
         methods.update($this);
 
@@ -175,7 +175,7 @@ THE SOFTWARE.
     },
 
     _moveScrollbar: function(evt){
-      console.log(this)
+      // console.log(this)
       var $this = $(evt.target).data("scrollbars");
       // console.log(evt) evt.originalEvent.scrollHeight is cool...
       // console.log("moving scrollbar", $this.scrollRatio);
@@ -315,23 +315,23 @@ THE SOFTWARE.
 
   /*------------------- Getters/Setters ----------------------*/
     getScrollbarWidth: function(){
-      return this.scrollbarWidth;
+      return $(this).data('scrollbars').scrollbarWidth;
     },
 
     height: function(val, time){
-      this.resize(val, null, time);
+      return $(this).data('scrollbars').resize(val, null, time);
     },
 
     width: function(val, time){
-      this.resize(null, val, time);
+      return $(this).data('scrollbars').resize(null, val, time);
     },
 
     scrollTop: function(val, time){
-      this.scrollRect.stop().animate({scrollTop:val}, time);
+      return $(this).data('scrollbars').scrollRect.stop().animate({scrollTop:val}, time);
     },
 
     scrollLeft: function(val, time){
-      this.scrollRect.stop().animate({scrollLeft:val}, time);
+      return $(this).data('scrollbars').scrollRect.stop().animate({scrollLeft:val}, time);
     },
 
     setOverflow: function(type){
@@ -349,22 +349,22 @@ THE SOFTWARE.
     update: function updt($target){
       
       if(! Boolean($target)){
-        console.log("making new target", $(this).data('scrollbars'), arguments)
+        // console.log("making new target", $(this).data('scrollbars'), arguments)
         $target = $(this).data('scrollbars');
       }else{
-        console.log("making new target", $target.data('scrollbars'), arguments) 
+        // console.log("making new target", $target.data('scrollbars'), arguments) 
         $target = $target.data('scrollbars');
       }
       
       if ( ! Boolean($target)){
-        return console.log("still null")
+        return trace("scrollbars still null");
       }
         
       
       // FIXME: I think that $target will be the arguments object when it's called from outside!!!
       
       // console.log(arguments.callee.caller)
-      trace("updating", $target.scrollRect, $target.attr('id')); //, this.element.attr("id"));
+      // trace("updating", $target.scrollRect, $target.attr('id')); //, this.element.attr("id"));
 
       $target.scrollRect.width($target.innerWidth()+$target.scrollbarWidth).height($target.innerHeight()+$target.scrollbarWidth);
       
@@ -416,18 +416,21 @@ THE SOFTWARE.
 
     // FIXME: this is a confusing mess, and probably a bad idea in general
     resize: function(width, height, time){
+      
       alert("setting scrollbars to:", width, height, time);
-      // 
-      // width = (width == null)? this.element.width() : width;
-      // height = (height == null)? this.element.height() : height;
-      // 
-      // if(time == null)
-      // {
-      //   this.element.width(width).height(height);
-      //   this.scrollRect.width(width+scrollbarWidth).height(height+scrollbarWidth);
-      // }
-      // 
-      // this.update();
+      
+      var $this = $(this).data('scrollbars');
+      
+      width = (width == null)? $this.width() : width;
+      height = (height == null)? $this.height() : height;
+      
+      if(time == null)
+      {
+        $this.width(width).height(height);
+        $this.scrollRect.width(width+scrollbarWidth).height(height+scrollbarWidth);
+      }
+      
+      methods.update($this);
     }//,
     // destroy : function( ) {
     //  TODO: remove styling
@@ -474,7 +477,7 @@ THE SOFTWARE.
       // if(scrollPane.data)
         // console.log('updating:', scrollPane.data('scrollbars'))
       if( $(this).parents('.scrollPane').length > 0){
-        console.log('apparently this exists, but fixking doesnt work') //, 
+        // console.log('apparently this exists, but fixking doesnt work') //, 
         methods.update($(this).parents('.scrollPane').first().data('scrollbars'))
       } //$(this).parents('.scrollPane').attr('id')+"\n"+$(this).find('.scrollPane').attr('id'))//.scrollbars('update'))
         
