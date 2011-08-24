@@ -52,21 +52,19 @@ THE SOFTWARE.
           $.extend( settings, options );
         }
         
+        // Tooltip plugin code here
         
+      
         var $this = $(this),
             data = $this.data('scrollbar'),
             $scrollPane = $this.addClass('scrollPane');
             
-            
+        $this.options = settings;
+        
         if (! data) {
           
-          $this.options = settings;
-          
           // // creation code for mywidget
-          $this.scrollbarWidth = $.fn.scrollbars('_getScrollbarWidth');
-          
-          console.log($this.scrollbarWidth);
-          
+          $this.scrollbarWidth = methods._getScrollbarWidth(); //$.fn.scrollbars('_getScrollbarWidth');
           
           // FIXME: Use css object that can be easily extended to include new properties when needed (height, width, etc)
           $this.csses = {
@@ -117,42 +115,44 @@ THE SOFTWARE.
           
           $this._append($this.scrollbarVertical)._append(this.scrollbarHorizontal);
           
-          $this.scrollRect.data("scrollbars", $this).scroll($.fn.scrollbars('_moveScrollbar', $this)).bind('scrollStart', $.fn.scrollbars('_handleMouseOver', $this)).bind('scrollStop', $.fn.scrollbars('_handleMouseOut', $this) );
-        //   $this.data("scrollbars", this).scroll(this._unScroll); // this might be causing some errors, added at the last minute
-        //   
-        //   this.scrollbarVertical.data("scrollbars", this).mouseover(this._handleMouseOver).mouseout(this._handleMouseOut).mousedown(this._handleScrollbarMouseDownVertical);
-        //   this.scrollbarHorizontal.data("scrollbars", this).mouseover(this._handleMouseOver).mouseout(this._handleMouseOut).mousedown(this._handleScrollbarMouseDownHorizontal);
-        //   this.scrollHandleVertical.data("scrollbars", this).mouseover(this._handleMouseOver).mouseout(this._handleMouseOut).mousedown(this._handleScrollHandleMouseDownVertical);
-        //   this.scrollHandleHorizontal.data("scrollbars", this).mouseover(this._handleMouseOver).mouseout(this._handleMouseOut).mousedown(this._handleScrollHandleMouseDownHorizontal);
-        //   
-        //   // jQuery.data($this, this); // don't think this can help...
-        //   
-        //   
-        //   var elem = this;
-        //   
-        //   if(this.options.autoUpdate)
-        //   {
-        //     // console.log("is it autoupdating in the first place?", $this.data('scrollbars'));
-        //     $(window).resize(function(){
-        //       elem.update();
-        //     });
-        //   }
-        //   $(window).mouseup(function(){ // ends the mouse drag, works everywhere.
-        //     $(this).unbind('mousemove');
-        //   });
-        //   
-        //   if(this.options.updateInterval > 0)
-        //   {
-        //     if(this.options.updateInterval < 200) this.options.updateInterval = 200; // keeps the user from setting a value that will kill the browser.
-        //     this.updateInterval = setInterval($.proxy(this.update, this), this.options.updateInterval);
-        //     // return false; 
-        //   }
-        //   
-        // 
-        $(this).data('scrollbar', {
-          target : $this,
-          scrollPane : $scrollPane // a bit redunda
-        });
+          $this.scrollRect.data("scrollbars", $this).scroll(methods._moveScrollbar).bind('scrollStart.scrollbars', methods._handleMouseOver).bind('scrollStop', methods._handleMouseOut );
+          $this.data("scrollbars", $this).scroll(methods._unScroll); // this might be causing some errors, added at the last minute
+          
+          $this.scrollbarVertical.data("scrollbars", $this).mouseover(methods._handleMouseOver).mouseout(methods._handleMouseOut).mousedown(methods._handleScrollbarMouseDownVertical);
+          $this.scrollbarHorizontal.data("scrollbars", $this).mouseover(methods._handleMouseOver).mouseout(methods._handleMouseOut).mousedown(methods._handleScrollbarMouseDownHorizontal);
+          $this.scrollHandleVertical.data("scrollbars", $this).mouseover(methods._handleMouseOver).mouseout(methods._handleMouseOut).mousedown(methods._handleScrollHandleMouseDownVertical);
+          $this.scrollHandleHorizontal.data("scrollbars", $this).mouseover(methods._handleMouseOver).mouseout(methods._handleMouseOut).mousedown(methods._handleScrollHandleMouseDownHorizontal);
+          
+          // jQuery.data($this, this); // don't think this can help...
+          
+          
+          var elem = this;
+          
+          if(settings.autoUpdate)
+          {
+            // console.log("is it autoupdating in the first place?", $this.data('scrollbars'));
+            $(window).resize(function(){
+              elem.update();
+            });
+          }
+          $(window).mouseup(function(){ // ends the mouse drag, works everywhere.
+            $(this).unbind('mousemove');
+          });
+          
+          if(settings.updateInterval > 0)
+          {
+            if(settings.updateInterval < 200) settings.updateInterval = 200; // keeps the user from setting a value that will kill the browser.
+            this.updateInterval = setInterval($.proxy(this.update, this), settings.updateInterval);
+            // return false; 
+          }
+          
+        
+          // $(this).data('scrollbar', {
+          //             target : $this,
+          //             // scrollPane : $scrollPane // a bit redunda
+          //           });
+          
+          $this.data('scrollbar', $this);
         //   
         }
         
@@ -160,7 +160,7 @@ THE SOFTWARE.
         
         console.log('already created, updating now')
         
-        // this.update();
+        methods.update($this);
 
       }); // end of return each...
     },
@@ -174,9 +174,10 @@ THE SOFTWARE.
       return f-s;
     },
 
-    _moveScrollbar: function($target){
-      console.log($target)
-      var $this = $target; //$(evt.target).data("scrollbars");
+    _moveScrollbar: function(evt){
+      console.log(this)
+      var $this = $(evt.target).data("scrollbars");
+      // console.log(evt) evt.originalEvent.scrollHeight is cool...
       // console.log("moving scrollbar", $this.scrollRatio);
       if($this && $this.scrollRatio){
         $this.scrollHandleVertical.css({top:Math.round($this.scrollRect.scrollTop()*$this.scrollRatio.top)+"px"});
@@ -228,16 +229,13 @@ THE SOFTWARE.
   /*------------------- Event Handlers ----------------------*/
     _handleMouseOver: function(evt){
       var $this = $(evt.target).data("scrollbars");
-      
-      console.log()
-      
-      $this._transitionTo(evt, $this.options.hover);
+      methods._transitionTo(evt, $this.options.hover);
       return false;
     },
     _handleMouseOut: function(evt){
       try{
         var $this = $(evt.target).data("scrollbars");
-        $this._transitionFrom(evt, $this.options.hover);
+        methods._transitionFrom(evt, $this.options.hover);
       }
       catch(err){
         trace(err, evt.target);
@@ -348,55 +346,63 @@ THE SOFTWARE.
       }
     },
   /*------------------- Public Functions ----------------------*/
-    update: function(){
-      // trace("updating", this.scrollRect, this.element.attr('id')); //, this.element.attr("id"));
+    update: function updt($target){
+      console.log($target);
+      
+      if(! $target)
+        $target = $(this)
+      
+      // FIXME: I think that $target will be the arguments object when it's called from outside!!!
+      
+      // console.log(arguments.callee.caller)
+      trace("updating", $target.scrollRect, $target.attr('id')); //, this.element.attr("id"));
 
-      this.scrollRect.width(this.element.innerWidth()+this.scrollbarWidth).height(this.element.innerHeight()+this.scrollbarWidth);
-
+      $target.scrollRect.width($target.innerWidth()+$target.scrollbarWidth).height($target.innerHeight()+$target.scrollbarWidth);
+      
       // console.log("height of children: ", this.scrollContent.children().height())
-
+      
       // this.scrollContent.css({width: this.scrollContent.children().width(), height:this.scrollContent.children().height()})
-
-      this.scrollRatio = {top:this.element.innerHeight()/this.scrollContent.outerHeight(), 
-                          left:this.element.innerWidth()/this.scrollContent.outerWidth()};
-
-      if(this.scrollRatio.top >= 1){
-        this.scrollHandleVertical.css({display:"none"});
-        this.scrollbarVertical.css({display:"none"});
-        this.scrollbarHorizontal.addClass('noVertical');
+      
+      $target.scrollRatio = {top:$target.innerHeight()/$target.scrollContent.outerHeight(), 
+                          left:$target.innerWidth()/$target.scrollContent.outerWidth()};
+      
+      if($target.scrollRatio.top >= 1){
+        $target.scrollHandleVertical.css({display:"none"});
+        $target.scrollbarVertical.css({display:"none"});
+        $target.scrollbarHorizontal.addClass('noVertical');
       }
       else{
-        this.scrollHandleVertical.css({display:"block"});
-        this.scrollbarVertical.css({display:"block"});
-        this.scrollbarHorizontal.removeClass('noVertical');
+        $target.scrollHandleVertical.css({display:"block"});
+        $target.scrollbarVertical.css({display:"block"});
+        $target.scrollbarHorizontal.removeClass('noVertical');
       }
-      if(this.scrollRatio.left >= 1){
-        this.scrollHandleHorizontal.css({display:"none"});
-        this.scrollbarHorizontal.css({display:"none"});
-        this.scrollbarVertical.addClass('noHorizontal');
+      if($target.scrollRatio.left >= 1){
+        $target.scrollHandleHorizontal.css({display:"none"});
+        $target.scrollbarHorizontal.css({display:"none"});
+        $target.scrollbarVertical.addClass('noHorizontal');
       }
       else{
-        this.scrollHandleHorizontal.css({display:"block"});
-        this.scrollbarHorizontal.css({display:"block"});
-        this.scrollbarVertical.removeClass('noHorizontal');
+        $target.scrollHandleHorizontal.css({display:"block"});
+        $target.scrollbarHorizontal.css({display:"block"});
+        $target.scrollbarVertical.removeClass('noHorizontal');
       }
-
-      var scrollPadding = {top:parseInt(this.scrollbarVertical.css('margin-top'), 10) + parseInt(this.scrollbarVertical.css('margin-bottom'), 10),
-                          left:parseInt(this.scrollbarHorizontal.css('margin-left'), 10) + parseInt(this.scrollbarHorizontal.css('margin-right'), 10)};
-
-      if((this.element.height()*this.scrollRatio.top) - scrollPadding.top < parseInt(this.scrollbarVertical.css("min-height"), 10))
-        this.scrollRatio.top = (this.element.innerHeight() + (this.element.height()*this.scrollRatio.top) - scrollPadding.top - parseInt(this.scrollbarVertical.css("min-height"), 10)) / this.scrollContent.outerHeight();
-
-      if((this.element.width()*this.scrollRatio.left) - scrollPadding.left < parseInt(this.scrollbarHorizontal.css("min-width"), 10))
-        this.scrollRatio.top = (this.element.innerWidth() + (this.element.width()*this.scrollRatio.left) - scrollPadding.left - parseInt(this.scrollbarHorizontal.css("min-width"), 10)) / this.scrollContent.outerWidth();
-
-      this.scrollbarVertical.height(this.element.innerHeight() - scrollPadding.top);
-      this.scrollbarHorizontal.width(this.element.innerWidth() - scrollPadding.left);
-
-      this.scrollHandleVertical.height(Math.round((this.element.innerHeight()*this.scrollRatio.top) - scrollPadding.top));
-      this.scrollHandleHorizontal.width(Math.round((this.element.innerWidth()*this.scrollRatio.left) - scrollPadding.left));
-
-      this.scrollRect.scroll(); // bad form? ...
+      
+      var scrollPadding = {top:parseInt($target.scrollbarVertical.css('margin-top'), 10) + parseInt($target.scrollbarVertical.css('margin-bottom'), 10),
+                          left:parseInt($target.scrollbarHorizontal.css('margin-left'), 10) + parseInt($target.scrollbarHorizontal.css('margin-right'), 10)};
+      
+      if(($target.height()*$target.scrollRatio.top) - scrollPadding.top < parseInt($target.scrollbarVertical.css("min-height"), 10))
+        $target.scrollRatio.top = ($target.innerHeight() + ($target.height()*$target.scrollRatio.top) - scrollPadding.top - parseInt($target.scrollbarVertical.css("min-height"), 10)) / $target.scrollContent.outerHeight();
+      
+      if(($target.width()*$target.scrollRatio.left) - scrollPadding.left < parseInt($target.scrollbarHorizontal.css("min-width"), 10))
+        $target.scrollRatio.top = ($target.innerWidth() + ($target.width()*$target.scrollRatio.left) - scrollPadding.left - parseInt($target.scrollbarHorizontal.css("min-width"), 10)) / $target.scrollContent.outerWidth();
+      
+      $target.scrollbarVertical.height($target.innerHeight() - scrollPadding.top);
+      $target.scrollbarHorizontal.width($target.innerWidth() - scrollPadding.left);
+      
+      $target.scrollHandleVertical.height(Math.round(($target.innerHeight()*$target.scrollRatio.top) - scrollPadding.top));
+      $target.scrollHandleHorizontal.width(Math.round(($target.innerWidth()*$target.scrollRatio.left) - scrollPadding.left));
+      
+      $target.scrollRect.scroll(); // bad form? ...
     },
 
     resize: function(width, height, time){
