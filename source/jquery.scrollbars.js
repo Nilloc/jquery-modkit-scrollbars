@@ -30,50 +30,6 @@ THE SOFTWARE.
 (function(){
   
   var methods = {
-    // init:function(options){
-    //   return this.each(function(){
-    // 
-    //   var $this = $(this),
-    //       data = $this.data('tooltip'),
-    //       tooltip = $('<div />', {
-    //         text : $this.attr('title')
-    //       });
-    // 
-    //    // If the plugin hasn't been initialized yet
-    //    if ( ! data ) {
-    // 
-    //      /*
-    //        Do more setup stuff here
-    //      */
-    // 
-    //      $(this).data('tooltip', {
-    //          target : $this,
-    //          tooltip : tooltip
-    //      });
-    // 
-    //    }
-    //  });
-    // },
-    // destroy : function( ) {
-    // 
-    //  return this.each(function(){
-    // 
-    //    var $this = $(this),
-    //        data = $this.data('tooltip');
-    // 
-    //    // Namespacing FTW
-    //    $(window).unbind('.tooltip');
-    //    data.tooltip.remove();
-    //    $this.removeData('tooltip');
-    // 
-    //  })
-    // 
-    // },
-    // reposition : function( ) { // ... },
-    // show : function( ) { // ... },
-    // hide : function( ) { // ... },
-    // update : function( content ) { // ...}
-    // };
     init: function(options){
       
       var settings = {
@@ -106,98 +62,107 @@ THE SOFTWARE.
             
         if (! data) {
           
-          // do all the setup stuff
+          // // creation code for mywidget
+          $this.scrollbarWidth = $.fn.scrollbars('_getScrollbarWidth');
           
-          /*
-            Do more setup stuff here
-          */
-
-          $(this).data('scrollbar', {
-            target : $this,
-            scrollPane : $scrollPane
-          });
+          console.log($this.scrollbarWidth);
           
-        }
-        console.log("creating", $this.data('scrollbar'))
-        //       
-        // // creation code for mywidget
-        // this.scrollbarWidth = this._getScrollbarWidth();
-        // this.element.addClass('scrollPane');
-        // this.element.padding = [this.element.css('padding-top'), this.element.css('padding-right'), this.element.css('padding-bottom'), this.element.css('padding-left')];
-        // this.element.css({overflow:'hidden', padding:0});
-        // 
-        // // this should not overwrite the existing, if it is fixed or absolute...
-        // if(this.element.css("position") != "absolute" && this.element.css("position") != "fixed ") 
-        //   this.element.css({position:"relative"});
-        // 
-        // // more globally, we'll have to pass the css from the scrollable to the scrollContent at some point. or else not reparent.
-        // this.element.children().wrapAll('<div class="scrollContent" style="float:left;"/>');
-        // this.scrollContent = this.element.children();
-        // 
-        // // console.log()
-        // 
-        // this.scrollContent.css({padding:this.element.padding.join(" ")});
-        // this.element.children().wrapAll('<div class="scrollRect" style="overflow:scroll;"/>');
-        // this.scrollRect = this.element.children(); // should probably be smarter
-        // 
-        // // TODO: see if this makes sense everywhere...
-        // 
-        // // FIXME: This needs to be differen when the styles object is added
-        //  if(this.options.fillWidth && !(this.element.padding.left != '0px' || this.element.padding != '0px'))
-        //    this.scrollContent.css({'min-width':'100%'});
-        // 
-        // 
-        // // this.scrollbar = {vertical:null, horizontal:null};
-        // // this.scrollHandle = {vertical:null, horizontal:null};
-        // this.vector={x:0,y:0};
-        // 
-        // this.scrollbarVertical = $('<div class="scrollbar bar vertical"></div>'); // this could be shorter if i reverse the order and return the $(new html).append...
-        // this.scrollbarHorizontal = $('<div class="scrollbar bar horizontal"></div>');
-        // 
-        // this.scrollHandleVertical = $('<div class="scrollbar handle vertical"></div>');
-        // this.scrollHandleHorizontal = $('<div class="scrollbar handle horizontal"></div>');
-        // 
-        // // TODO: Impliment arrows here.
-        // 
-        // this.scrollbarVertical._append(this.scrollHandleVertical);
-        // this.scrollbarHorizontal._append(this.scrollHandleHorizontal);
-        // 
-        // this.element._append(this.scrollbarVertical)._append(this.scrollbarHorizontal);
-        // 
-        // this.scrollRect.data("scrollbars", this).scroll(this._moveScrollbar).bind('scrollStart', this._handleMouseOver).bind('scrollStop', this._handleMouseOut);
-        // this.element.data("scrollbars", this).scroll(this._unScroll); // this might be causing some errors, added at the last minute
-        // 
-        // this.scrollbarVertical.data("scrollbars", this).mouseover(this._handleMouseOver).mouseout(this._handleMouseOut).mousedown(this._handleScrollbarMouseDownVertical);
-        // this.scrollbarHorizontal.data("scrollbars", this).mouseover(this._handleMouseOver).mouseout(this._handleMouseOut).mousedown(this._handleScrollbarMouseDownHorizontal);
-        // this.scrollHandleVertical.data("scrollbars", this).mouseover(this._handleMouseOver).mouseout(this._handleMouseOut).mousedown(this._handleScrollHandleMouseDownVertical);
-        // this.scrollHandleHorizontal.data("scrollbars", this).mouseover(this._handleMouseOver).mouseout(this._handleMouseOut).mousedown(this._handleScrollHandleMouseDownHorizontal);
-        // 
-        // // jQuery.data(this.element, this); // don't think this can help...
-        // 
-        // 
-        // var elem = this;
-        // 
-        // if(this.options.autoUpdate)
-        // {
-        //   // console.log("is it autoupdating in the first place?", this.element.data('scrollbars'));
-        //   $(window).resize(function(){
-        //     elem.update();
+          
+          // FIXME: Use css object that can be easily extended to include new properties when needed (height, width, etc)
+          $this.csses = {
+            'padding-top':$this.css('padding-top'), 
+            'padding-right':$this.css('padding-right'), 
+            'padding-bottom':$this.css('padding-bottom'), 
+            'padding-left':$this.css('padding-left'),
+            
+            //float overrides to left to fix width of scolled content, should also apply a clearfix actually...
+            'float':'left'
+          };
+          $scrollPane.css({overflow:'hidden', padding:0}); // TODO: padding will be different if scrollbars have background (or something else will have to change height, maybe margin)
+          
+          // this should not overwrite the existing, if it is fixed or absolute...
+          if($this.css("position") != "absolute" && $this.css("position") != "fixed ") 
+            $scrollPane.css({position:"relative"});
+          
+          // more globally, we'll have to pass the css from the scrollable to the scrollContent at some point. or else not reparent.
+          $this.scrollContent = $this.children().wrapAll('<div class="scrollContent"/>').parent();
+                    
+          // passes the padding into the new scrollContent (since we want that to be maintained, but scrolled (I think))
+          $this.scrollContent.css($this.csses);
+          
+          // add the scrollRect (this is what actually has scrollbars)
+          $this.scrollRect = $this.children().wrapAll('<div class="scrollRect" style="overflow:scroll;"/>').parent();
+          
+          // TODO: see if this makes sense everywhere...
+          
+          // FIXME: This needs to be differen when the styles object is added
+          // if(this.options.fillWidth && !($this.csses['padding-left'] != '0px' || $this.csses['padding-right'] != '0px'))
+          //   this.scrollContent.css({'min-width':'100%'});
+          
+          
+          // this.scrollbar = {vertical:null, horizontal:null};
+          // this.scrollHandle = {vertical:null, horizontal:null};
+          $this.vector={x:0,y:0};
+          
+          $this.scrollbarVertical = $('<div class="scrollbar bar vertical"></div>'); // this could be shorter if i reverse the order and return the $(new html).append...
+          $this.scrollbarHorizontal = $('<div class="scrollbar bar horizontal"></div>');
+          
+          $this.scrollHandleVertical = $('<div class="scrollbar handle vertical"></div>');
+          $this.scrollHandleHorizontal = $('<div class="scrollbar handle horizontal"></div>');
+          
+          // TODO: Impliment arrows here.
+          
+          $this.scrollbarVertical._append($this.scrollHandleVertical);
+          $this.scrollbarHorizontal._append($this.scrollHandleHorizontal);
+          
+          $this._append($this.scrollbarVertical)._append(this.scrollbarHorizontal);
+          
+        //   this.scrollRect.data("scrollbars", this).scroll(this._moveScrollbar).bind('scrollStart', this._handleMouseOver).bind('scrollStop', this._handleMouseOut);
+        //   $this.data("scrollbars", this).scroll(this._unScroll); // this might be causing some errors, added at the last minute
+        //   
+        //   this.scrollbarVertical.data("scrollbars", this).mouseover(this._handleMouseOver).mouseout(this._handleMouseOut).mousedown(this._handleScrollbarMouseDownVertical);
+        //   this.scrollbarHorizontal.data("scrollbars", this).mouseover(this._handleMouseOver).mouseout(this._handleMouseOut).mousedown(this._handleScrollbarMouseDownHorizontal);
+        //   this.scrollHandleVertical.data("scrollbars", this).mouseover(this._handleMouseOver).mouseout(this._handleMouseOut).mousedown(this._handleScrollHandleMouseDownVertical);
+        //   this.scrollHandleHorizontal.data("scrollbars", this).mouseover(this._handleMouseOver).mouseout(this._handleMouseOut).mousedown(this._handleScrollHandleMouseDownHorizontal);
+        //   
+        //   // jQuery.data($this, this); // don't think this can help...
+        //   
+        //   
+        //   var elem = this;
+        //   
+        //   if(this.options.autoUpdate)
+        //   {
+        //     // console.log("is it autoupdating in the first place?", $this.data('scrollbars'));
+        //     $(window).resize(function(){
+        //       elem.update();
+        //     });
+        //   }
+        //   $(window).mouseup(function(){ // ends the mouse drag, works everywhere.
+        //     $(this).unbind('mousemove');
         //   });
-        // }
-        // $(window).mouseup(function(){ // ends the mouse drag, works everywhere.
-        //   $(this).unbind('mousemove');
-        // });
+        //   
+        //   if(this.options.updateInterval > 0)
+        //   {
+        //     if(this.options.updateInterval < 200) this.options.updateInterval = 200; // keeps the user from setting a value that will kill the browser.
+        //     this.updateInterval = setInterval($.proxy(this.update, this), this.options.updateInterval);
+        //     // return false; 
+        //   }
+        //   
         // 
-        // if(this.options.updateInterval > 0)
-        // {
-        //   if(this.options.updateInterval < 200) this.options.updateInterval = 200; // keeps the user from setting a value that will kill the browser.
-        //   this.updateInterval = setInterval($.proxy(this.update, this), this.options.updateInterval);
-        //   // return false; 
-        // }
-        // 
+        //   $(this).data('scrollbar', {
+        //     target : $this,
+        //     scrollPane : $scrollPane
+        //   });
+        //   
+       }
+        
+        // console.log(this)
+        
+        console.log('already created, updating now')
+        
         // this.update();
 
-      });
+      }); // end of return each...
     },
     _getScrollbarWidth: function(){
       var div = $('<div style="width:50px;height:50px;overflow:hidden;position:absolute;top:-200px;left:-200px;"><div id="scrollbarWidthTester" style="height:100px;float:none;display:block;"></div>'); 
@@ -451,12 +416,12 @@ THE SOFTWARE.
     //  return this.each(function(){
     // 
     //    var $this = $(this),
-    //        data = $this.data('tooltip');
+    //        data = $this.data('scrollbars');
     // 
     //    // Namespacing FTW
-    //    $(window).unbind('.tooltip');
+    //    $(window).unbind('.scrollbars');
     //    data.tooltip.remove();
-    //    $this.removeData('tooltip');
+    //    $this.removeData('scrollbars');
     // 
     //  })
     // 
@@ -488,8 +453,8 @@ THE SOFTWARE.
       o = originalAppend.apply(this, arguments);
       
       trace('ner');
-      if( $(this).parents('.scrollPane').length > 0) //$(this).parents('.scrollPane').attr('id')+"\n"+$(this).find('.scrollPane').attr('id'))//.scrollbars('update'))
-         $(this).parents('.scrollPane').data('scrollbars').scrollbars('update');
+      // if( $(this).parents('.scrollPane').length > 0) //$(this).parents('.scrollPane').attr('id')+"\n"+$(this).find('.scrollPane').attr('id'))//.scrollbars('update'))
+         // $(this).parents('.scrollPane').data('scrollbars').scrollbars('update');
       return o;
     }    
   };
