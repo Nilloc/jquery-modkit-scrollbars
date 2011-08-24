@@ -9,7 +9,11 @@ Use this how you see fit, but sparingly, and please if possible don't use it, sy
 
 
 TODO
-Add background for scrollbar, which will push the content inside, like the system scrollbars (so the scrollbars don't float over the content anymore)
+- Add background for scrollbar, which will push the content inside, like the system scrollbars (so the scrollbars don't float over the content anymore)
+- Add setInterval that checks for size change only and if size changed, update
+  OR
+  setInterval can check $this.height(), and scrollContent.height() and then if either has changed call update... I think this would be fairly light weight.
+  Furthermore, setInterval can be started when the display/visibility is set to block/visible, and stopped when display/visibility is none/hidden.
 
 Thanks,
 Collin
