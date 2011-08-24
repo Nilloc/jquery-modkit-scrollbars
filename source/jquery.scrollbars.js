@@ -56,7 +56,7 @@ THE SOFTWARE.
         
       
         var $this = $(this),
-            data = $this.data('scrollbar'),
+            data = $this.data('scrollbars'),
             $scrollPane = $this.addClass('scrollPane');
             
         $this.options = settings;
@@ -147,16 +147,16 @@ THE SOFTWARE.
           }
           
         
-          // $(this).data('scrollbar', {
+          // $(this).data('scrollbars', {
           //             target : $this,
           //             // scrollPane : $scrollPane // a bit redunda
           //           });
           
-          $this.data('scrollbar', $this);
+          $this.data('scrollbars', $this);
         //   
         }
         
-        // console.log($this.data('scrollbar'))
+        // console.log($this.data('scrollbars'))
         
         console.log('already created, updating now')
         
@@ -347,10 +347,14 @@ THE SOFTWARE.
     },
   /*------------------- Public Functions ----------------------*/
     update: function updt($target){
-      console.log($target);
       
-      if(! $target)
-        $target = $(this)
+      if(! Boolean($target)){
+        console.log("making new target")
+        $target = $(this).data('scrollbars');
+      }else{
+        $target = $target.data('scrollbars');
+      }
+        
       
       // FIXME: I think that $target will be the arguments object when it's called from outside!!!
       
