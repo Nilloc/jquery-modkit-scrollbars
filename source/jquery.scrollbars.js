@@ -349,10 +349,15 @@ THE SOFTWARE.
     update: function updt($target){
       
       if(! Boolean($target)){
-        console.log("making new target")
+        console.log("making new target", $(this).data('scrollbars'), arguments)
         $target = $(this).data('scrollbars');
       }else{
+        console.log("making new target", $target.data('scrollbars'), arguments) 
         $target = $target.data('scrollbars');
+      }
+      
+      if ( ! Boolean($target)){
+        return console.log("still null")
       }
         
       
@@ -412,17 +417,17 @@ THE SOFTWARE.
     // FIXME: this is a confusing mess, and probably a bad idea in general
     resize: function(width, height, time){
       alert("setting scrollbars to:", width, height, time);
-
-      width = (width == null)? this.element.width() : width;
-      height = (height == null)? this.element.height() : height;
-
-      if(time == null)
-      {
-        this.element.width(width).height(height);
-        this.scrollRect.width(width+scrollbarWidth).height(height+scrollbarWidth);
-      }
-
-      this.update();
+      // 
+      // width = (width == null)? this.element.width() : width;
+      // height = (height == null)? this.element.height() : height;
+      // 
+      // if(time == null)
+      // {
+      //   this.element.width(width).height(height);
+      //   this.scrollRect.width(width+scrollbarWidth).height(height+scrollbarWidth);
+      // }
+      // 
+      // this.update();
     }//,
     // destroy : function( ) {
     //  TODO: remove styling
@@ -468,8 +473,11 @@ THE SOFTWARE.
       
       // if(scrollPane.data)
         // console.log('updating:', scrollPane.data('scrollbars'))
-      if( $(this).parents('.scrollPane').length > 0) //$(this).parents('.scrollPane').attr('id')+"\n"+$(this).find('.scrollPane').attr('id'))//.scrollbars('update'))
-         console.log('apparently this exists, but fixking doesnt work')
+      if( $(this).parents('.scrollPane').length > 0){
+        console.log('apparently this exists, but fixking doesnt work') //, 
+        methods.update($(this).parents('.scrollPane').first().data('scrollbars'))
+      } //$(this).parents('.scrollPane').attr('id')+"\n"+$(this).find('.scrollPane').attr('id'))//.scrollbars('update'))
+        
          // $(this).parents('.scrollPane').scrollbars();
       return o;
     }    
