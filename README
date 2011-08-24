@@ -6,5 +6,10 @@ Arrows aren't supported, but that's something no designer has ever asked me for 
 
 Use this how you see fit, but sparingly, and please if possible don't use it, systemwide scrollbars are systemwide for a reason ;P
 
+
+
+TODO
+Add background for scrollbar, which will push the content inside, like the system scrollbars (so the scrollbars don't float over the content anymore)
+
 Thanks,
 Collin
