@@ -94,7 +94,7 @@ THE SOFTWARE.
           // TODO: see if this makes sense everywhere...
           
           // FIXME: This needs to be differen when the styles object is added
-          // if(this.options.fillWidth && !($this.csses['padding-left'] != '0px' || $this.csses['padding-right'] != '0px'))
+          // if(settings.fillWidth && !($this.csses['padding-left'] != '0px' || $this.csses['padding-right'] != '0px'))
           //   this.scrollContent.css({'min-width':'100%'});
           
           
@@ -283,7 +283,7 @@ THE SOFTWARE.
       // console.log(evt);
 
       var $this = $(evt.target).data("scrollbars");
-      var scrollAmt = $this.element.innerHeight();
+      var scrollAmt = $this.innerHeight();
 
       if(evt.pageY > $this.scrollHandleVertical.offset().top)
         $this.scrollRect.scrollTop( $this.scrollRect.scrollTop() + scrollAmt );
@@ -293,7 +293,7 @@ THE SOFTWARE.
     },
     _handleScrollbarMouseDownHorizontal: function(evt){
       var $this = $(evt.target).data("scrollbars");
-      var scrollAmt = $this.element.innerWidth();
+      var scrollAmt = $this.innerWidth();
 
       if(evt.pageX > $this.scrollHandleHorizontal.offset().left)
         $this.scrollRect.scrollLeft( $this.scrollRect.scrollLeft() + scrollAmt );
@@ -304,7 +304,7 @@ THE SOFTWARE.
     _unScroll: function(evt){
       // TODO: Find a more elegant solution for this issue, it's to keep users from selecting and then drag-scrolling the scroll element
       try{
-        $(evt.target).data("scrollbars").element.scrollLeft(0).scrollTop(0);
+        $(evt.target).data("scrollbars").scrollLeft(0).scrollTop(0);
       }
       catch(err){
         trace(err, evt.target);
@@ -405,6 +405,7 @@ THE SOFTWARE.
       $target.scrollRect.scroll(); // bad form? ...
     },
 
+    // FIXME: this is a confusing mess, and probably a bad idea in general
     resize: function(width, height, time){
       alert("setting scrollbars to:", width, height, time);
 
@@ -452,7 +453,7 @@ THE SOFTWARE.
 
   $.fn.append = function(){
       var o, scrollContent = this.find(".scrollContent"); // might be faster as "first" or "nearest (closest?)"
-      var scrollPane = this.parents(".scrollPane");
+      // var scrollPane = this.parents(".scrollPane").first();
     if (this.hasClass("scrollPane") && scrollContent.length > 0) {
       o = originalAppend.apply(scrollContent.first(), arguments);
       this.scrollbars('update');
@@ -461,9 +462,11 @@ THE SOFTWARE.
     else{
       o = originalAppend.apply(this, arguments);
       
-      trace('ner');
-      // if( $(this).parents('.scrollPane').length > 0) //$(this).parents('.scrollPane').attr('id')+"\n"+$(this).find('.scrollPane').attr('id'))//.scrollbars('update'))
-         // $(this).parents('.scrollPane').data('scrollbars').scrollbars('update');
+      // if(scrollPane.data)
+        // console.log('updating:', scrollPane.data('scrollbars'))
+      if( $(this).parents('.scrollPane').length > 0) //$(this).parents('.scrollPane').attr('id')+"\n"+$(this).find('.scrollPane').attr('id'))//.scrollbars('update'))
+         console.log('apparently this exists, but fixking doesnt work')
+         // $(this).parents('.scrollPane').scrollbars();
       return o;
     }    
   };
