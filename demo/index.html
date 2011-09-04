@@ -103,6 +103,10 @@
       $('#leftside').scrollbars('update');
 		});
 		
+	  $('#resizeLeft').click(function(){
+	    $('.scrollable').first().width(400).scrollbars('update');
+	  })
+		
 	 });
 	</script>
 	
@@ -123,6 +127,7 @@
 	
 	<input type="button" name="addText" value="Add Text" id="addText" class="left-button" />
 	<input type="button" name="removeText" value="Remove Last Paragraph" id="removeText" class="left-button" />
+	<input type="button" name="resizeLeft" value="Resize" id="resizeLeft" class="left-button" />
 
 </body>
 </html>
