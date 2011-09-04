@@ -239,7 +239,7 @@ THE SOFTWARE.
         methods._transitionFrom(evt, $this.options.hover);
       }
       catch(err){
-        trace(err, evt.target);
+        console.log(err, evt.target)
       }
       return false;
     },
@@ -308,7 +308,7 @@ THE SOFTWARE.
         $(evt.target).data("scrollbars").scrollLeft(0).scrollTop(0);
       }
       catch(err){
-        trace(err, evt.target);
+        console.log(err, evt.target)
       } // FIXME: Bletcherous Hack because I'm not sure 
 
       // return false;
@@ -358,7 +358,7 @@ THE SOFTWARE.
       }
       
       if ( ! Boolean($target)){
-        return trace("scrollbars still null");
+        return console.log("scrollbars still null")
       }
         
       
