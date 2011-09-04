@@ -115,7 +115,7 @@ THE SOFTWARE.
           
           $this._append($this.scrollbarVertical)._append($this.scrollbarHorizontal);
           
-          $this.scrollRect.data("scrollbars", $this).scroll(methods._moveScrollbar).bind('scrollStart.scrollbars', methods._handleMouseOver).bind('scrollStop', methods._handleMouseOut );
+          $this.scrollRect.data("scrollbars", $this).scroll(methods._moveScrollbar).bind('scrollStart.scrollbars', methods._handleMouseOver).bind('scrollStop.scrollbars', methods._handleMouseOut);
           $this.data("scrollbars", $this).scroll(methods._unScroll); // this might be causing some errors, added at the last minute
           
           $this.scrollbarVertical.data("scrollbars", $this).mouseover(methods._handleMouseOver).mouseout(methods._handleMouseOut).mousedown(methods._handleScrollbarMouseDownVertical);
@@ -160,7 +160,7 @@ THE SOFTWARE.
         
         // console.log('already created, updating now')
         
-        methods.update($this);
+        $.proxy(methods.update, $this);
 
       }); // end of return each...
     },
@@ -228,9 +228,10 @@ THE SOFTWARE.
 
   /*------------------- Event Handlers ----------------------*/
     _handleMouseOver: function(evt){
-      var $this = $(evt.target).data("scrollbars");
-      methods._transitionTo(evt, $this.options.hover);
-      return false;
+      console.log(evt.target)
+      // var $this = $(evt.target).data("scrollbars") || $(this).data("scrollbars");
+      // methods._transitionTo(evt, $this.options.hover);
+      // return false;
     },
     _handleMouseOut: function(evt){
       try{
@@ -476,10 +477,10 @@ THE SOFTWARE.
       
       // if(scrollPane.data)
         // console.log('updating:', scrollPane.data('scrollbars'))
-      if( $(this).parents('.scrollPane').length > 0){
-        // console.log('apparently this exists, but fixking doesnt work') //, 
-        methods.update($(this).parents('.scrollPane').first().data('scrollbars'))
-      } //$(this).parents('.scrollPane').attr('id')+"\n"+$(this).find('.scrollPane').attr('id'))//.scrollbars('update'))
+      // if( $(this).parents('.scrollPane').length > 0){
+      //   // console.log('apparently this exists, but fixking doesnt work') //, 
+      //   methods.update($(this).parents('.scrollPane').first().data('scrollbars'))
+      // } //$(this).parents('.scrollPane').attr('id')+"\n"+$(this).find('.scrollPane').attr('id'))//.scrollbars('update'))
         
          // $(this).parents('.scrollPane').scrollbars();
       return o;
